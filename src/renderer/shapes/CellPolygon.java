@@ -14,7 +14,6 @@ public class CellPolygon {
 
     private Color color;
     private CellPoint[] points;
-    private int location;
 
     public CellPolygon(CellPoint... points) { // ... means any amount of arguments of type CellPoint
         this.color = Color.WHITE; // default color
@@ -41,7 +40,6 @@ public class CellPolygon {
             CellPoint p = points[i];
             this.points[i] = new CellPoint(p.x, p.y, p.z);
         }
-        this.location = location;
     }
 
     public void render(Graphics g) {
