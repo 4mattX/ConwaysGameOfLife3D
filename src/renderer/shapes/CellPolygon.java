@@ -54,16 +54,16 @@ public class CellPolygon {
         g.setColor(this.color);
         g.fillPolygon(poly);
 
-
-        BasicStroke stroke = new BasicStroke(2.0f,
-                BasicStroke.CAP_ROUND,
-                BasicStroke.JOIN_ROUND);
-
-        g2.setStroke(stroke);
-
-        Color edgeColor = new Color(30, 30, 30);
-        g2.setColor(edgeColor);
-        g2.drawPolygon(poly);
+//
+//        BasicStroke stroke = new BasicStroke(2.0f,
+//                BasicStroke.CAP_ROUND,
+//                BasicStroke.JOIN_ROUND);
+//
+//        g2.setStroke(stroke);
+//
+//        Color edgeColor = new Color(30, 30, 30);
+//        g2.setColor(edgeColor);
+//        g2.drawPolygon(poly);
     }
 
     public void rotate(boolean clockWise, double xDegrees, double yDegrees, double zDegrees) {

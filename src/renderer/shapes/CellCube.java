@@ -9,8 +9,10 @@ public class CellCube {
 
     private CellPolygon[] polygons;
     private Color color;
+    private boolean alive;
 
-    public CellCube(double x, double y, double z, int size) {
+    public CellCube(double x, double y, double z, int size, boolean alive) {
+        this.alive = alive;
         this.color = Color.WHITE;
         createCellCube(x, y, z, size);
     }
@@ -27,6 +29,11 @@ public class CellCube {
     }
 
     private void createCellCube(double x, double y, double z, int size) {
+
+        if (!alive) {
+            return;
+        }
+
         CellPoint p1 = new CellPoint(size / 2 + x, -size / 2 + y, -size / 2 + z);
         CellPoint p2 = new CellPoint(size / 2 + x, size / 2 + y, -size / 2 + z);
         CellPoint p3 = new CellPoint(size / 2 + x, size / 2 + y, size / 2 + z);
@@ -85,6 +92,14 @@ public class CellCube {
             }
         }
         return sum;
+    }
+
+    public void kill() {
+        this.alive = false;
+    }
+
+    public void revive() {
+        this.alive = true;
     }
 
 }

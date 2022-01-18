@@ -1,6 +1,7 @@
 package renderer;// Display Class is responsible for all things related with window display
 // This also includes any User Controller(s) involved
 
+import renderer.shapes.CellBox;
 import renderer.shapes.CellCube;
 
 import javax.swing.*;
@@ -18,7 +19,7 @@ public class Display extends Canvas implements Runnable{
     private static final double NANO_SECOND = 1000000000.0 / 60;
     private static final double SECOND = 1000;
 
-    private static CellCube cellCube;
+    private static CellBox cellBox;
 
     private static boolean running = false;
 
@@ -93,7 +94,7 @@ public class Display extends Canvas implements Runnable{
         Graphics g = bs.getDrawGraphics();
         // Draws background of display
         drawBackground(g);
-        cellCube.render(g);
+        cellBox.render(g);
 
         g.dispose();
         bs.show();
@@ -109,12 +110,12 @@ public class Display extends Canvas implements Runnable{
 
     // Initializer used to create first instances of cells
     private void init() {
-        cellCube = new CellCube(0, 0, 0, 100);
+        cellBox = new CellBox(10, 10, 10, 20);
     }
 
 
     private void update() {
-        cellCube.rotate(true, 1, 1, 0);
+        cellBox.rotate(0, 0, 5);
     }
 
     public static void main(String[] args) {
