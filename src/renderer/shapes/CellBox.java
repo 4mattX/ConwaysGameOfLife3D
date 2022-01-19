@@ -1,9 +1,9 @@
 package renderer.shapes;
 
+import renderer.rendering.shaders.LightVector;
+
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.*;
 import java.util.List;
 
 public class CellBox {
@@ -36,10 +36,25 @@ public class CellBox {
 
         int cellIndex = 0;
 
+        int centerX = (amountX / 2) * cellSize;
+        int centerY = (amountY / 2) * cellSize;
+        int centerZ = (amountZ / 2) * cellSize;
+
+        Random random = new Random();
+
+
         for (int x = 0; x < amountX; x++) {
             for (int y = 0; y < amountY; y++) {
                 for (int z = 0; z < amountZ; z++) {
-                    cells[cellIndex] = new CellCube((x * cellSize), (y * cellSize), (z * cellSize), cellSize, true);
+                    boolean isAlive = random.nextBoolean();
+
+//                    if ((x + y + z) % 19 == 0) {
+//                        isAlive = true;
+//                    } else {
+//                        isAlive = false;
+//                    }
+
+                    cells[cellIndex] = new CellCube((x * cellSize) - centerX, (y * cellSize) - centerY, (z * cellSize) - centerZ, cellSize, isAlive);
                     cellIndex++;
                 }
             }
@@ -49,13 +64,15 @@ public class CellBox {
 
     public void render(Graphics g) {
         for (CellCube cube : this.cells) {
-            cube.render(g);
+            if (cube.isAlive()) {
+                cube.render(g);
+            }
         }
     }
 
-    public void rotate(double xDegrees, double yDegrees, double zDegrees) {
+    public void rotate(double xDegrees, double yDegrees, double zDegrees, LightVector lightVector) {
         for (CellCube cube : this.cells) {
-            cube.rotate(true, xDegrees, yDegrees, zDegrees);
+            cube.rotate(true, xDegrees, yDegrees, zDegrees, lightVector);
         }
         this.cells = sortCellCubes(this.cells);
     }
@@ -80,9 +97,6 @@ public class CellBox {
                 }
 
                 return c2.getAverageX() - c1.getAverageX() < 0 ? 1 : -1;
-
-
-
             }
         });
 

@@ -1,6 +1,7 @@
 package renderer;// Display Class is responsible for all things related with window display
 // This also includes any User Controller(s) involved
 
+import renderer.rendering.shaders.LightVector;
 import renderer.shapes.CellBox;
 import renderer.shapes.CellCube;
 
@@ -20,6 +21,7 @@ public class Display extends Canvas implements Runnable{
     private static final double SECOND = 1000;
 
     private static CellBox cellBox;
+    private LightVector lightVector = LightVector.normalize(new LightVector(1, 1, 1));
 
     private static boolean running = false;
 
@@ -28,7 +30,6 @@ public class Display extends Canvas implements Runnable{
 
         Dimension size = new Dimension(WIDTH, HEIGHT);
         this.setPreferredSize(size);
-
     }
 
     public synchronized void start() {
@@ -110,12 +111,12 @@ public class Display extends Canvas implements Runnable{
 
     // Initializer used to create first instances of cells
     private void init() {
-        cellBox = new CellBox(10, 10, 10, 20);
+        cellBox = new CellBox(15, 15, 15, 10);
     }
 
 
     private void update() {
-        cellBox.rotate(0, 0, 5);
+        cellBox.rotate(3, 1, 2, lightVector);
     }
 
     public static void main(String[] args) {

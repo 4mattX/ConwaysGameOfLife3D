@@ -2,6 +2,7 @@ package renderer.shapes;
 
 import renderer.rendering.CellPoint;
 import renderer.rendering.PointConverter;
+import renderer.rendering.shaders.LightVector;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -13,7 +14,11 @@ public class CellPolygon {
 
 
     private Color color;
+    private Color lightingColor;
     private CellPoint[] points;
+    private Boolean isAlive;
+
+    private static final double AMBIENT_LIGHTING = 0.05;
 
     public CellPolygon(CellPoint... points) { // ... means any amount of arguments of type CellPoint
         this.color = Color.WHITE; // default color
@@ -26,6 +31,7 @@ public class CellPolygon {
 
     public CellPolygon(Color color, CellPoint... points) {
         this.color = color;
+        this.lightingColor = color;
         this.points = new CellPoint[points.length];
         for (int i = 0; i < points.length; i++) {
             CellPoint p = points[i];
@@ -51,27 +57,50 @@ public class CellPolygon {
             poly.addPoint(p.x, p.y);
         }
 
-        g.setColor(this.color);
-        g.fillPolygon(poly);
 
-//
-//        BasicStroke stroke = new BasicStroke(2.0f,
-//                BasicStroke.CAP_ROUND,
-//                BasicStroke.JOIN_ROUND);
-//
-//        g2.setStroke(stroke);
-//
-//        Color edgeColor = new Color(30, 30, 30);
-//        g2.setColor(edgeColor);
-//        g2.drawPolygon(poly);
+
+        g.setColor(this.lightingColor);
+        g.fillPolygon(poly);
     }
 
-    public void rotate(boolean clockWise, double xDegrees, double yDegrees, double zDegrees) {
+    private void updateLightingColor(double lightRatio) {
+        int red = (int) (this.color.getRed() * lightRatio);
+        int green = (int) (this.color.getGreen() * lightRatio);
+        int blue = (int) (this.color.getBlue() * lightRatio);
+
+        this.lightingColor = new Color(red, green, blue);
+    }
+
+    public void rotate(boolean clockWise, double xDegrees, double yDegrees, double zDegrees, LightVector lightVector) {
         for (CellPoint point : points) {
             PointConverter.rotateAxisX(point, clockWise, xDegrees);
             PointConverter.rotateAxisY(point, clockWise, yDegrees);
             PointConverter.rotateAxisZ(point, clockWise, zDegrees);
         }
+
+        this.updateLighting(lightVector);
+    }
+
+    private void updateLighting(LightVector lightVector) {
+
+        // Prevents crash if you draw a line
+        if (this.points.length < 3) {
+            return;
+        }
+
+        LightVector v1 = new LightVector(this.points[0], this.points[1]);
+        LightVector v2 = new LightVector(this.points[1], this.points[2]);
+        LightVector normalVector = LightVector.normalize(LightVector.crossProduct(v2, v1));
+
+        double dotProduct = LightVector.dotProduct(normalVector, lightVector);
+        double sign = dotProduct < 0 ? -1 : 1;
+        dotProduct = sign * (dotProduct * dotProduct);
+
+        dotProduct = (dotProduct + 1) / 2 * 0.8; // Yeh stackoverflow
+
+        // Caps lighting between 0 and 1
+        double lightRatio = Math.min(1, Math.max(0, AMBIENT_LIGHTING + dotProduct));
+        this.updateLightingColor(lightRatio);
     }
 
     public void setColor(Color color) {
@@ -128,4 +157,11 @@ public class CellPolygon {
     }
 
 
+    public Boolean getAlive() {
+        return isAlive;
+    }
+
+    public void setAlive(Boolean alive) {
+        isAlive = alive;
+    }
 }
