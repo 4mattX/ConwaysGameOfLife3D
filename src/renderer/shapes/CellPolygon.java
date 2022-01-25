@@ -1,10 +1,12 @@
 package renderer.shapes;
 
+import renderer.Display;
 import renderer.rendering.CellPoint;
 import renderer.rendering.PointConverter;
 import renderer.rendering.shaders.LightVector;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -48,6 +50,7 @@ public class CellPolygon {
         }
     }
 
+
     public void render(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
 
@@ -59,8 +62,22 @@ public class CellPolygon {
 
 
 
-        g.setColor(this.lightingColor);
-        g.fillPolygon(poly);
+        g2.setColor(this.lightingColor);
+        g2.fillPolygon(poly);
+
+    }
+
+    public void renderOutline(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g;
+
+        Polygon poly = new Polygon();
+        for (int i = 0; i < points.length; i++) {
+            Point p = PointConverter.convertPoint(points[i]);
+            poly.addPoint(p.x, p.y);
+        }
+
+        g2d.setColor(Color.GREEN);
+        g2d.drawPolygon(poly);
     }
 
     private void updateLightingColor(double lightRatio) {

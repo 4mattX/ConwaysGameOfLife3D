@@ -9,6 +9,7 @@ import java.util.List;
 public class CellBox {
 
     private CellCube[] cells;
+    private CellCube outline;
     private int cellSize;
 
     private int amountX;
@@ -46,13 +47,13 @@ public class CellBox {
         for (int x = 0; x < amountX; x++) {
             for (int y = 0; y < amountY; y++) {
                 for (int z = 0; z < amountZ; z++) {
-                    boolean isAlive = random.nextBoolean();
+                    boolean isAlive;
 
-//                    if ((x + y + z) % 19 == 0) {
-//                        isAlive = true;
-//                    } else {
-//                        isAlive = false;
-//                    }
+                    if ((x + y + z) % 19 == 0) {
+                        isAlive = true;
+                    } else {
+                        isAlive = false;
+                    }
 
                     cells[cellIndex] = new CellCube((x * cellSize) - centerX, (y * cellSize) - centerY, (z * cellSize) - centerZ, cellSize, isAlive);
                     cellIndex++;
@@ -60,21 +61,37 @@ public class CellBox {
             }
         }
 
+        outline = new CellCube(0, 0, 0, amountX * cellSize, true);
+
     }
 
     public void render(Graphics g) {
+        renderBackOutline(g);
         for (CellCube cube : this.cells) {
-            if (cube.isAlive()) {
-                cube.render(g);
+            if (!cube.isAlive()) {
+                continue;
             }
+            cube.render(g);
         }
+        renderFrontOutline(g);
     }
+
+    public void renderFrontOutline(Graphics g) {
+        outline.renderFrontOutline(g);
+    }
+
+    public void renderBackOutline(Graphics g) {
+        outline.renderBackOutline(g);
+    }
+
+
 
     public void rotate(double xDegrees, double yDegrees, double zDegrees, LightVector lightVector) {
         for (CellCube cube : this.cells) {
             cube.rotate(true, xDegrees, yDegrees, zDegrees, lightVector);
         }
         this.cells = sortCellCubes(this.cells);
+        outline.rotate(true, xDegrees, yDegrees, zDegrees, lightVector);
     }
 
     public static CellCube[] sortCellCubes(CellCube[] cellCubeArray) {

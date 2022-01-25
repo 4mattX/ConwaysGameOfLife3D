@@ -8,6 +8,7 @@ import renderer.shapes.CellCube;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 
 public class Display extends Canvas implements Runnable{
 
@@ -21,7 +22,7 @@ public class Display extends Canvas implements Runnable{
     private static final double SECOND = 1000;
 
     private static CellBox cellBox;
-    private LightVector lightVector = LightVector.normalize(new LightVector(1, 1, 1));
+    private LightVector lightVector = LightVector.normalize(new LightVector(-1, 1, -1));
 
     private static boolean running = false;
 
@@ -78,6 +79,7 @@ public class Display extends Canvas implements Runnable{
                 frames = 0; // resets frames to 0 to properly calculate updated fps
             }
 
+
         }
         stop();
     }
@@ -111,12 +113,12 @@ public class Display extends Canvas implements Runnable{
 
     // Initializer used to create first instances of cells
     private void init() {
-        cellBox = new CellBox(15, 15, 15, 10);
+        cellBox = new CellBox(25, 25, 25, 10);
     }
 
 
     private void update() {
-        cellBox.rotate(3, 1, 2, lightVector);
+        cellBox.rotate(0, 0, 4, lightVector);
     }
 
     public static void main(String[] args) {
