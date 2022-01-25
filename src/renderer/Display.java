@@ -113,12 +113,15 @@ public class Display extends Canvas implements Runnable{
 
     // Initializer used to create first instances of cells
     private void init() {
-        cellBox = new CellBox(25, 25, 25, 10);
+        cellBox = new CellBox(100, 100, 100, 3);
+        cellBox.rotate(0, 0, 45, lightVector);
     }
 
 
     private void update() {
-        cellBox.rotate(0, 0, 4, lightVector);
+//        cellBox.rotate(0, 0, 4, lightVector);
+        cellBox.testAnimation();
+
     }
 
     public static void main(String[] args) {

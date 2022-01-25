@@ -21,6 +21,8 @@ public class CellBox {
     private double yDeg;
     private double zDeg;
 
+    private int globalCounter = 1;
+
 
     public CellBox(int amountX, int amountY, int amountZ, int cellSize) {
         this.cellSize = cellSize;
@@ -63,6 +65,26 @@ public class CellBox {
 
         outline = new CellCube(0, 0, 0, amountX * cellSize, true);
 
+    }
+
+    public void testAnimation() {
+        int cellIndex = 0;
+
+        for (int x = 0; x < amountX; x++) {
+            for (int y = 0; y < amountY; y++) {
+                for (int z = 0; z < amountZ; z++) {
+
+                    if ((x + y + z) % globalCounter == 0) {
+                        cells[cellIndex].revive();
+                    } else {
+                        cells[cellIndex].kill();
+                    }
+
+                    cellIndex++;
+                }
+            }
+        }
+        globalCounter++;
     }
 
     public void render(Graphics g) {
