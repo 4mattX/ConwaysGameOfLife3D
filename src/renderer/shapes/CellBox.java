@@ -47,15 +47,9 @@ public class CellBox {
 
 
         for (int x = 0; x < amountX; x++) {
-            for (int y = 0; y < amountY; y++) {
-                for (int z = 0; z < amountZ; z++) {
-                    boolean isAlive;
-
-                    if ((x + y + z) % 19 == 0) {
-                        isAlive = true;
-                    } else {
-                        isAlive = false;
-                    }
+            for (int y = 0; y < amountX; y++) {
+                for (int z = 0; z < amountX; z++) {
+                    boolean isAlive = false;
 
                     cells[cellIndex] = new CellCube((x * cellSize) - centerX, (y * cellSize) - centerY, (z * cellSize) - centerZ, cellSize, isAlive);
                     cellIndex++;
@@ -63,28 +57,9 @@ public class CellBox {
             }
         }
 
-        outline = new CellCube(0, 0, 0, amountX * cellSize, true);
+//        outline = new CellCube(-cellSize/2, -cellSize/2, -cellSize/2, (amountX * cellSize), true); // FOR EVEN
+        outline = new CellCube(0, 0, 0, (amountX * cellSize), true);
 
-    }
-
-    public void testAnimation() {
-        int cellIndex = 0;
-
-        for (int x = 0; x < amountX; x++) {
-            for (int y = 0; y < amountY; y++) {
-                for (int z = 0; z < amountZ; z++) {
-
-                    if ((x + y + z) % globalCounter == 0) {
-                        cells[cellIndex].revive();
-                    } else {
-                        cells[cellIndex].kill();
-                    }
-
-                    cellIndex++;
-                }
-            }
-        }
-        globalCounter++;
     }
 
     public void render(Graphics g) {
@@ -112,7 +87,7 @@ public class CellBox {
         for (CellCube cube : this.cells) {
             cube.rotate(true, xDegrees, yDegrees, zDegrees, lightVector);
         }
-        this.cells = sortCellCubes(this.cells);
+//        this.cells = sortCellCubes(this.cells);
         outline.rotate(true, xDegrees, yDegrees, zDegrees, lightVector);
     }
 
@@ -144,6 +119,53 @@ public class CellBox {
         }
 
         return cellCubeArray;
+    }
+
+    //
+    // BEGIN OF RULE TESTING
+    //
+
+    public void testAnimation() {
+        int cellIndex = 0;
+
+        for (int x = 0; x < amountX; x++) {
+            for (int y = 0; y < amountY; y++) {
+                for (int z = 0; z < amountZ; z++) {
+
+                    if ((x + y + z) % globalCounter == 0) {
+                        cells[cellIndex].revive();
+                    } else {
+                        cells[cellIndex].kill();
+                    }
+
+                    cellIndex++;
+                }
+            }
+        }
+        globalCounter++;
+    }
+
+    public void populateCenter() {
+        int index = cells.length / 2;
+//        cells[0].revive();
+//        cells[cells.length - 1].revive();
+
+        cells[index].revive();
+
+
+
+    }
+
+    public void populateAll() {
+        for (int i = 0; i < cells.length; i++) {
+            cells[i].revive();
+        }
+    }
+
+    public void populateEach() {
+
+        cells[totalCells - globalCounter - 1].revive();
+        globalCounter++;
     }
 
 

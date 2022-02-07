@@ -51,11 +51,14 @@ public class Display extends Canvas implements Runnable{
     // The update function is compressed to give smooth animations
     public void run() {
 
+        int smoothVar = 8; // smaller number = faster
+
         long lastTime = System.nanoTime();
         long timer = System.currentTimeMillis();
         final double ns = NANO_SECOND;
-        double delta = 0;
+        double delta = smoothVar;
         int frames = 0;
+
 
         // Initializes objects in display
         init();
@@ -64,10 +67,10 @@ public class Display extends Canvas implements Runnable{
             long now = System.nanoTime();
             delta += (now - lastTime) / ns;
             lastTime = now;
-            while (delta >= 1) {
+            while (delta >= smoothVar) {
 
                 update();
-                delta--;
+                delta = 0;
                 render();
                 frames++;
             }
@@ -113,14 +116,17 @@ public class Display extends Canvas implements Runnable{
 
     // Initializer used to create first instances of cells
     private void init() {
-        cellBox = new CellBox(100, 100, 100, 3);
-        cellBox.rotate(0, 0, 45, lightVector);
+        cellBox = new CellBox(51, 51, 51, 7);
+        cellBox.rotate(0, 0, 60, lightVector);
+        cellBox.populateCenter();
+        cellBox.populateAll();
     }
 
 
     private void update() {
-//        cellBox.rotate(0, 0, 4, lightVector);
+//        cellBox.rotate(0, 0, 2, lightVector);
         cellBox.testAnimation();
+//        cellBox.populateEach();
 
     }
 
