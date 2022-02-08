@@ -19,6 +19,14 @@ public class CellCube {
         createCellCube(x, y, z, size);
     }
 
+    public CellCube(double x, double y, double z, int size, boolean alive, Color color) {
+        this.alive = alive;
+        this.color = color;
+        createCellCube(x, y, z, size);
+    }
+
+
+
     public void render(Graphics g) {
         for (CellPolygon poly : this.polygons) {
             poly.render(g);

@@ -9,6 +9,7 @@ import java.util.List;
 public class CellBox {
 
     private CellCube[] cells;
+    private CellCube[] cellsCopy;
     private CellCube outline;
     private int cellSize;
 
@@ -36,6 +37,7 @@ public class CellBox {
 
     private void createBox() {
         cells = new CellCube[totalCells];
+        cellsCopy = new CellCube[totalCells];
 
         int cellIndex = 0;
 
@@ -51,7 +53,10 @@ public class CellBox {
                 for (int z = 0; z < amountX; z++) {
                     boolean isAlive = false;
 
-                    cells[cellIndex] = new CellCube((x * cellSize) - centerX, (y * cellSize) - centerY, (z * cellSize) - centerZ, cellSize, isAlive);
+                    CellCube cellCube = new CellCube((x * cellSize) - centerX, (y * cellSize) - centerY, (z * cellSize) - centerZ, cellSize, isAlive, colorAdjust(x, y, z));
+
+                    cells[cellIndex] = cellCube;
+                    cellsCopy[cellIndex] = cellCube;
                     cellIndex++;
                 }
             }
@@ -145,14 +150,38 @@ public class CellBox {
         globalCounter++;
     }
 
+
+    public Color colorAdjust(int x, int y, int z) {
+
+        int center = cells.length / 2;
+        int edge = amountX / 2;
+
+        int colorDif = (int) Math.sqrt((Math.pow(x - center, 2)) + (Math.pow(y - center, 2)) + (Math.pow(z - center, 2)));
+        int maxDif = (int) Math.sqrt((Math.pow(center - edge, 2)) + (Math.pow(center - edge, 2)) + (Math.pow(center - edge, 2)));
+        int newColorVal = Math.abs(maxDif - colorDif);
+
+        Color color = new Color(100, 0,  newColorVal * 5);
+
+        return color;
+    }
+
     public void populateCenter() {
-        int index = cells.length / 2;
-//        cells[0].revive();
-//        cells[cells.length - 1].revive();
 
-        cells[index].revive();
+        int length = amountX;
+        int face = length * length;
+        int center = cells.length / 2;
 
-
+        for (int layer = -1; layer < 2; layer++) {
+            cells[center - layer - face - length].revive();
+            cells[center - layer - face].revive();
+            cells[center - layer - face + length].revive();
+            cells[center - layer - length].revive();
+            cells[center - layer].revive();
+            cells[center - layer + length].revive();
+            cells[center - layer + face - length].revive();
+            cells[center - layer + face].revive();
+            cells[center - layer + face + length].revive();
+        }
 
     }
 
@@ -162,10 +191,123 @@ public class CellBox {
         }
     }
 
+    public void populateRandom() {
+        for (int i = 0; i < cells.length; i++) {
+
+            Random random = new Random();
+
+            if (random.nextBoolean()) {
+                if (random.nextBoolean()) {
+                    cells[i].revive();
+                }
+            }
+
+        }
+    }
+
     public void populateEach() {
 
-        cells[totalCells - globalCounter - 1].revive();
+        cells[globalCounter].revive();
         globalCounter++;
+    }
+
+
+
+    // RULES
+
+    public void setCells() {
+
+        this.cellsCopy = new CellCube[cells.length];
+
+        for (int i = 0; i < cells.length; i++) {
+            this.cellsCopy[i] = cells[i];
+        }
+
+    }
+
+    public void copyCells() {
+        for (int i = 0; i < cells.length; i++) {
+            this.cells[i] = this.cellsCopy[i];
+        }
+    }
+
+    public void updateLife() {
+        copyCells();
+
+        int amtAlive = 0;
+        int length = amountX;
+        int face = length * length;
+        int center = cells.length / 2;
+
+        for (int i = 0; i < cells.length; i++) {
+            // For each cell, calculate amount of alive neighbors
+            try {
+
+                for (int layer = -1; layer < 2; layer++) {
+
+                    if (cells[center - layer - face - length].isAlive()) {
+                        amtAlive++;
+                    }
+
+                    if (cells[center - layer - face].isAlive()) {
+                        amtAlive++;
+                    }
+
+                    if (cells[center - layer - face + length].isAlive()) {
+                        amtAlive++;
+                    }
+
+                    if (cells[center - layer - length].isAlive()) {
+                        amtAlive++;
+                    }
+
+                    if (cells[center - layer].isAlive()) {
+
+                        if (layer != 0) {
+                            amtAlive++;
+                        }
+                    }
+
+                    if (cells[center - layer + length].isAlive()) {
+                        amtAlive++;
+                    }
+
+                    if (cells[center - layer + face - length].isAlive()) {
+                        amtAlive++;
+                    }
+
+                    if (cells[center - layer + face].isAlive()) {
+                        amtAlive++;
+                    }
+
+                    if (cells[center - layer + face + length].isAlive()) {
+                        amtAlive++;
+                    }
+
+                }
+
+
+            } catch (Exception e) {
+            }
+
+
+
+            if (cells[i].isAlive()) {
+                System.out.println(amtAlive);
+                if (!(amtAlive == 2 || amtAlive == 3)) {
+                    cellsCopy[i].kill();
+                }
+            } else {
+                if (amtAlive == 3) {
+                    cellsCopy[i].revive();
+                }
+            }
+
+            amtAlive = 0;
+
+        }
+
+
     }
 
 

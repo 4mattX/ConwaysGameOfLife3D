@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 public class Display extends Canvas implements Runnable{
 
@@ -82,7 +83,6 @@ public class Display extends Canvas implements Runnable{
                 frames = 0; // resets frames to 0 to properly calculate updated fps
             }
 
-
         }
         stop();
     }
@@ -116,17 +116,16 @@ public class Display extends Canvas implements Runnable{
 
     // Initializer used to create first instances of cells
     private void init() {
-        cellBox = new CellBox(51, 51, 51, 7);
+        cellBox = new CellBox(51, 51, 51, 6);
         cellBox.rotate(0, 0, 60, lightVector);
-        cellBox.populateCenter();
-        cellBox.populateAll();
+
     }
 
 
     private void update() {
 //        cellBox.rotate(0, 0, 2, lightVector);
         cellBox.testAnimation();
-//        cellBox.populateEach();
+//        cellBox.updateLife();
 
     }
 
