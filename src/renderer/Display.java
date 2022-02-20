@@ -7,15 +7,25 @@ import renderer.shapes.CellCube;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
 public class Display extends Canvas implements Runnable{
 
-    public Thread thread; // Rendering is ran on separate single thread
+    public static Thread thread; // Rendering is ran on separate single thread
     private JFrame frame;
     private static String title = "Conway's Game of Life 3D";
+    private static JPanel bigPanel = new JPanel();
+    private static JPanel leftSlider = new JPanel();
+    private static JPanel leftSliderGhost = new JPanel();
+    private static JLabel leftLabel1 = new JLabel();
+    private static JPanel rightSlider = new JPanel();
+
+    private static boolean isOpening = false;
+    private static boolean isClosing = false;
 
     public static final int WIDTH = 1000;
     public static final int HEIGHT = 600;
@@ -114,10 +124,93 @@ public class Display extends Canvas implements Runnable{
         g.fillRect(0, 0, WIDTH * 2, HEIGHT * 2);
     }
 
+    private static void leftSliderMouseEnter(MouseEvent event) {
+
+        Thread th = new Thread()
+        {
+            @Override
+            public void run()
+            {
+                try {
+                    for(int j = 0; j < 155; j++)
+                    {
+                        Thread.sleep(1);
+                        leftSlider.setSize(j, HEIGHT);
+                    }
+                    leftSliderGhost.setSize(155, HEIGHT);
+                }
+                catch (Exception e)
+                {
+                    JOptionPane.showMessageDialog(null, e);
+                }
+            }
+        };th.start();
+
+    }
+
+    private static void leftSliderMouseExit(MouseEvent event) {
+
+        Thread th = new Thread()
+        {
+            @Override
+            public void run()
+            {
+                try {
+                    for(int i = 155; i > 0; i--)
+                    {
+                        Thread.sleep(1);
+                        leftSlider.setSize(i, 590);
+                    }
+                    leftSliderGhost.setSize(25, HEIGHT);
+                }
+                catch (Exception e)
+                {
+                    JOptionPane.showMessageDialog(null, e);
+                }
+            }
+        };th.start();
+
+    }
+
+    private static void initComponents(Display display) {
+        // BIG PANEL
+        bigPanel.setMinimumSize(new Dimension(WIDTH, HEIGHT));
+        bigPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        bigPanel.setPreferredSize(new Dimension(WIDTH / 4, HEIGHT));
+        bigPanel.setBackground(new Color(0, 0, 0));
+
+        // LEFT PANEL
+        leftSliderGhost.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent event) {
+                leftSliderMouseEnter(event);
+            }
+            public void mouseExited(MouseEvent event) {
+                leftSliderMouseExit(event);
+            }
+        });
+
+        leftSlider.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        leftSliderGhost.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        leftSlider.setBackground(Color.WHITE);
+        leftSliderGhost.setBackground(Color.BLACK);
+
+        leftLabel1.setText("Left Label 1");
+        leftLabel1.setForeground(Color.RED);
+        leftSlider.add(leftLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(46, 268, 109, 64));
+        bigPanel.add(leftSlider, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 0, HEIGHT));
+        bigPanel.add(leftSliderGhost, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 25, HEIGHT));
+
+        display.frame.add(bigPanel);
+        display.frame.pack();
+
+    }
+
     // Initializer used to create first instances of cells
     private void init() {
+//        initComponents();
         cellBox = new CellBox(51, 51, 51, 6);
         cellBox.rotate(0, 0, 60, lightVector);
+        cellBox.populateCenter();
 
     }
 
@@ -130,7 +223,9 @@ public class Display extends Canvas implements Runnable{
     }
 
     public static void main(String[] args) {
+
         Display display = new Display();
+        initComponents(display);
 
         display.frame.setTitle(title);
         display.frame.add(display); // Adding display to frame

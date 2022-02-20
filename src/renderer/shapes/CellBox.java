@@ -293,7 +293,6 @@ public class CellBox {
 
 
             if (cells[i].isAlive()) {
-                System.out.println(amtAlive);
                 if (!(amtAlive == 2 || amtAlive == 3)) {
                     cellsCopy[i].kill();
                 }
