@@ -208,17 +208,20 @@ public class Display extends Canvas implements Runnable{
     // Initializer used to create first instances of cells
     private void init() {
 //        initComponents();
-        cellBox = new CellBox(51, 51, 51, 6);
+        cellBox = new CellBox(51, 51, 51, 7);
         cellBox.rotate(0, 0, 60, lightVector);
-        cellBox.populateCenter();
+        cellBox.populateRandom();
+//        cellBox.createGlider();
+//        cellBox.populateCenter();
+//        cellBox.updateLife();
 
     }
 
 
     private void update() {
 //        cellBox.rotate(0, 0, 2, lightVector);
-        cellBox.testAnimation();
-//        cellBox.updateLife();
+//        cellBox.testAnimation();
+        cellBox.updateLife();
 
     }
 

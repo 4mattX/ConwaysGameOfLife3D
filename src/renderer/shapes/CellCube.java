@@ -12,6 +12,7 @@ public class CellCube {
     private Color color;
     private boolean alive;
     private int indexOfCellBox;
+    private int age;
 
     public CellCube(double x, double y, double z, int size, boolean alive) {
         this.alive = alive;
@@ -121,6 +122,7 @@ public class CellCube {
     }
 
     public void kill() {
+        this.setAge(0);
         this.alive = false;
     }
 
@@ -134,5 +136,13 @@ public class CellCube {
 
     public void setIndexOfCellBox(int indexOfCellBox) {
         this.indexOfCellBox = indexOfCellBox;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 }
