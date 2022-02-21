@@ -236,7 +236,7 @@ public class CellBox {
 
     public void populateRandom() {
 
-        int radius = 3;
+        int radius = 6;
 
         for (int x = (amountX / 2) - radius; x < (amountX / 2) + radius; x++) {
             for (int y = (amountY / 2) - radius; y < (amountY / 2) + radius; y++) {
@@ -245,16 +245,16 @@ public class CellBox {
                     Random random = new Random();
 
                     if (random.nextBoolean()) {
-                        if (random.nextBoolean()) {
+//                        if (random.nextBoolean()) {
 
                             if (random.nextBoolean()) {
                                 cellsArray[x][y][z].revive();
-                                cellsArray[x][y][z].setAge(4);
+                                cellsArray[x][y][z].setMaxAge(1);
                                 cellsArrayCopy[x][y][z].revive();
-                                cellsArrayCopy[x][y][z].setAge(4);
+                                cellsArrayCopy[x][y][z].setMaxAge(1);
                             }
 
-                        }
+//                        }
 
                     }
                 }
@@ -268,14 +268,21 @@ public class CellBox {
         int y = amountY / 2;
         int z = amountZ / 2;
 
+//        cellsArray[x][y][z].revive();
+//        cellsArray[x][y][z + 1].revive();
+//        cellsArray[x][y - 1][z].revive();
+//        cellsArray[x][y - 1][z + 1].revive();
+//        cellsArray[x - 1][y + 1][z].revive();
+//        cellsArray[x - 1][y + 1][z + 1].revive();
+//        cellsArray[x - 1][y][z - 1].revive();
+//        cellsArray[x - 1][y - 1][z - 1].revive();
+//        cellsArray[x - 1][y][z + 1].revive();
+//        cellsArray[x - 1][y - 1][z + 1].revive();
+
         cellsArray[x][y][z].revive();
-        cellsArray[x][y][z + 1].revive();
         cellsArray[x][y - 1][z].revive();
-        cellsArray[x][y - 1][z + 1].revive();
-        cellsArray[x - 1][y + 1][z].revive();
-        cellsArray[x - 1][y + 1][z + 1].revive();
-        cellsArray[x - 1][y][z - 1].revive();
-        cellsArray[x - 1][y - 1][z - 1].revive();
+        cellsArray[x - 1][y][z].revive();
+        cellsArray[x - 1][y - 1][z].revive();
         cellsArray[x - 1][y][z + 1].revive();
         cellsArray[x - 1][y - 1][z + 1].revive();
 
@@ -362,22 +369,53 @@ public class CellBox {
                         }
 
 
-                        if (cellsArray[x][y][z].isAlive()) {
-                            cellsArrayCopy[x][y][z].setAge(cellsArrayCopy[x][y][z].getAge() - 1);
+//                        if (cellsArray[x][y][z].isAlive()) {
+//                            cellsArrayCopy[x][y][z].setAge(cellsArrayCopy[x][y][z].getAge() - 1);
+//
+//                            if (cellsArrayCopy[x][y][z].getAge() < 1) {
+//                                cellsArrayCopy[x][y][z].kill();
+//                            }
+//
+//                            if (amountAlive != 4) {
+//                                if (cellsArrayCopy[x][y][z].getAge() != 1) {
+//                                    cellsArrayCopy[x][y][z].kill();
+//                                }
+//                            }
+//                        } else {
+//                            if (amountAlive == 4) {
+//                                cellsArrayCopy[x][y][z].revive();
+//                                cellsArrayCopy[x][y][z].setAge(4);
+//                            }
+//                        }
 
-                            if (cellsArrayCopy[x][y][z].getAge() < 1) {
-                                cellsArrayCopy[x][y][z].kill();
-                            }
+                        CellCube cell = cellsArray[x][y][z];
+                        CellCube cellCopy = cellsArrayCopy[x][y][z];
 
-                            if (amountAlive != 4) {
-                                cellsArrayCopy[x][y][z].kill();
-                            }
-                        } else {
-                            if (amountAlive == 4) {
-                                cellsArrayCopy[x][y][z].revive();
-                                cellsArrayCopy[x][y][z].setAge(4);
+
+                        if (cell.isAlive()) {
+                            cellCopy.age();
+
+                            if (!cellCopy.isAlive()) {
+                                continue;
                             }
                         }
+
+                        if (cell.isAlive()) {
+                            if (amountAlive == 4 || amountAlive == 5) {
+                                cellCopy.kill();
+                                continue;
+                            }
+                        }
+
+
+                        if (!cell.isAlive()) {
+                            if (amountAlive == 5) {
+                                cellCopy.revive();
+                                continue;
+                            }
+                        }
+
+
 
                     } catch (ArrayIndexOutOfBoundsException exception) {
                         cellsArrayCopy[x][y][z].kill();
@@ -385,9 +423,6 @@ public class CellBox {
                     }
 
                     amountAlive = 0;
-
-
-
 
                 }
             }

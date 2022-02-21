@@ -13,6 +13,7 @@ public class CellCube {
     private boolean alive;
     private int indexOfCellBox;
     private int age;
+    private int MAX_AGE;
 
     public CellCube(double x, double y, double z, int size, boolean alive) {
         this.alive = alive;
@@ -24,6 +25,7 @@ public class CellCube {
         this.alive = alive;
         this.color = color;
         createCellCube(x, y, z, size);
+        this.MAX_AGE = 4;
     }
 
 
@@ -122,12 +124,21 @@ public class CellCube {
     }
 
     public void kill() {
-        this.setAge(0);
         this.alive = false;
     }
 
     public void revive() {
+        this.age = this.MAX_AGE;
         this.alive = true;
+    }
+
+    public void age() {
+        this.age -= 1;
+        if (this.age < 1) {
+            this.age = 0;
+            this.kill();
+            return;
+        }
     }
 
     public int getIndexOfCellBox() {
@@ -144,5 +155,9 @@ public class CellCube {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public void setMaxAge(int age) {
+        this.MAX_AGE = age;
     }
 }

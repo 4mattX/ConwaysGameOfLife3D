@@ -28,7 +28,7 @@ public class Display extends Canvas implements Runnable{
     private static JSlider jSlider3 = new JSlider();
     private static JSlider jSlider4 = new JSlider();
 
-    private static boolean open = false;
+    private static boolean leftOpen = false;
 
     public static final int WIDTH = 1000;
     public static final int HEIGHT = 600;
@@ -129,7 +129,7 @@ public class Display extends Canvas implements Runnable{
 
     private static void leftSliderMouseEnter(MouseEvent event) {
 
-        if (open) {
+        if (leftOpen) {
             return;
         }
 
@@ -155,32 +155,7 @@ public class Display extends Canvas implements Runnable{
 
     }
 
-    private static void leftSliderMouseExit(MouseEvent event) {
-
-        Thread th = new Thread()
-        {
-            @Override
-            public void run()
-            {
-                try {
-                    for(int i = 155; i > 0; i--)
-                    {
-                        Thread.sleep(1);
-                        leftSlider.setSize(i, 590);
-                    }
-                    leftSliderGhost.setSize(25, HEIGHT);
-                }
-                catch (Exception e)
-                {
-                    JOptionPane.showMessageDialog(null, e);
-                }
-            }
-        };th.start();
-
-    }
-
     private static void mouseEnterMiddle(MouseEvent event) {
-        System.out.println("HERE");
 
         Thread th = new Thread()
         {
@@ -213,10 +188,10 @@ public class Display extends Canvas implements Runnable{
         bigPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent event) {
-                if (open) {
-                    leftSliderMouseExit(event);
+                if (leftOpen) {
+                    mouseEnterMiddle(event);
                 }
-                open = false;
+                leftOpen = false;
             }
         });
 
@@ -224,7 +199,7 @@ public class Display extends Canvas implements Runnable{
         leftSliderGhost.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent event) {
                 leftSliderMouseEnter(event);
-                open = true;
+                leftOpen = true;
             }
             public void mouseExited(MouseEvent event) {
 //                leftSliderMouseExit(event);
@@ -257,8 +232,8 @@ public class Display extends Canvas implements Runnable{
 //        initComponents();
         cellBox = new CellBox(51, 51, 51, 7);
         cellBox.rotate(0, 0, 60, lightVector);
-        cellBox.populateRandom();
-//        cellBox.createGlider();
+//        cellBox.populateRandom();
+        cellBox.createGlider();
 //        cellBox.populateCenter();
 //        cellBox.updateLife();
 
