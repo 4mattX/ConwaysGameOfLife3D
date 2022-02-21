@@ -22,10 +22,13 @@ public class Display extends Canvas implements Runnable{
     private static JPanel leftSlider = new JPanel();
     private static JPanel leftSliderGhost = new JPanel();
     private static JLabel leftLabel1 = new JLabel();
-    private static JPanel rightSlider = new JPanel();
 
-    private static boolean isOpening = false;
-    private static boolean isClosing = false;
+    private static JSlider jSlider1 = new JSlider();
+    private static JSlider jSlider2 = new JSlider();
+    private static JSlider jSlider3 = new JSlider();
+    private static JSlider jSlider4 = new JSlider();
+
+    private static boolean open = false;
 
     public static final int WIDTH = 1000;
     public static final int HEIGHT = 600;
@@ -126,6 +129,10 @@ public class Display extends Canvas implements Runnable{
 
     private static void leftSliderMouseEnter(MouseEvent event) {
 
+        if (open) {
+            return;
+        }
+
         Thread th = new Thread()
         {
             @Override
@@ -172,6 +179,30 @@ public class Display extends Canvas implements Runnable{
 
     }
 
+    private static void mouseEnterMiddle(MouseEvent event) {
+        System.out.println("HERE");
+
+        Thread th = new Thread()
+        {
+            @Override
+            public void run()
+            {
+                try {
+                    for(int i = 155; i > 0; i--)
+                    {
+                        Thread.sleep(1);
+                        leftSlider.setSize(i, 590);
+                    }
+                    leftSliderGhost.setSize(25, HEIGHT);
+                }
+                catch (Exception e)
+                {
+                    JOptionPane.showMessageDialog(null, e);
+                }
+            }
+        };th.start();
+    }
+
     private static void initComponents(Display display) {
         // BIG PANEL
         bigPanel.setMinimumSize(new Dimension(WIDTH, HEIGHT));
@@ -179,13 +210,24 @@ public class Display extends Canvas implements Runnable{
         bigPanel.setPreferredSize(new Dimension(WIDTH / 4, HEIGHT));
         bigPanel.setBackground(new Color(0, 0, 0));
 
+        bigPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent event) {
+                if (open) {
+                    leftSliderMouseExit(event);
+                }
+                open = false;
+            }
+        });
+
         // LEFT PANEL
         leftSliderGhost.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent event) {
                 leftSliderMouseEnter(event);
+                open = true;
             }
             public void mouseExited(MouseEvent event) {
-                leftSliderMouseExit(event);
+//                leftSliderMouseExit(event);
             }
         });
 
@@ -193,6 +235,11 @@ public class Display extends Canvas implements Runnable{
         leftSliderGhost.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         leftSlider.setBackground(Color.WHITE);
         leftSliderGhost.setBackground(Color.BLACK);
+
+        leftSlider.add(jSlider1, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 40, 145, -1));
+        leftSlider.add(jSlider2, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 70, 145, -1));
+        leftSlider.add(jSlider3, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 100, 145, -1));
+        leftSlider.add(jSlider4, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 130, 145, -1));
 
         leftLabel1.setText("Left Label 1");
         leftLabel1.setForeground(Color.RED);
