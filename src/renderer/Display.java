@@ -18,17 +18,22 @@ public class Display extends Canvas implements Runnable{
     public static Thread thread; // Rendering is ran on separate single thread
     private JFrame frame;
     private static String title = "Conway's Game of Life 3D";
+    private static JPanel rightBigPanel = new JPanel();
     private static JPanel bigPanel = new JPanel();
     private static JPanel leftSlider = new JPanel();
+    private static JPanel rightSlider = new JPanel();
     private static JPanel leftSliderGhost = new JPanel();
+    private static JPanel rightSliderGhost = new JPanel();
     private static JLabel leftLabel1 = new JLabel();
+    private static JLabel rightLabel = new JLabel();
 
     private static JSlider jSlider1 = new JSlider();
     private static JSlider jSlider2 = new JSlider();
     private static JSlider jSlider3 = new JSlider();
     private static JSlider jSlider4 = new JSlider();
 
-    private static boolean leftOpen = false;
+    private static boolean open = false;
+    private static boolean rOpen = false;
 
     public static final int WIDTH = 1000;
     public static final int HEIGHT = 600;
@@ -129,7 +134,7 @@ public class Display extends Canvas implements Runnable{
 
     private static void leftSliderMouseEnter(MouseEvent event) {
 
-        if (leftOpen) {
+        if (open) {
             return;
         }
 
@@ -144,7 +149,83 @@ public class Display extends Canvas implements Runnable{
                         Thread.sleep(1);
                         leftSlider.setSize(j, HEIGHT);
                     }
-                    leftSliderGhost.setSize(155, HEIGHT);
+                    leftSliderGhost.setSize(160, HEIGHT);
+                }
+                catch (Exception e)
+                {
+                    JOptionPane.showMessageDialog(null, e);
+                }
+            }
+        };th.start();
+
+    }
+
+    private static void rightSliderMouseEnter(MouseEvent event) {
+
+        if (rOpen) {
+            return;
+        }
+
+        Thread th = new Thread()
+        {
+            @Override
+            public void run()
+            {
+                try {
+                    for(int j = 0; j < 155; j++)
+                    {
+                        Thread.sleep(1);
+                        rightSlider.setBounds(225-j, 0, j, HEIGHT);
+                    }
+                    rightSliderGhost.setBounds(65, 0, 160, HEIGHT);
+                }
+                catch (Exception e)
+                {
+                    JOptionPane.showMessageDialog(null, e);
+                }
+            }
+        };th.start();
+
+    }
+
+    private static void leftSliderMouseExit(MouseEvent event) {
+
+        Thread th = new Thread()
+        {
+            @Override
+            public void run()
+            {
+                try {
+                    for(int i = 155; i > 0; i--)
+                    {
+                        Thread.sleep(1);
+                        leftSlider.setSize(i, HEIGHT);
+                    }
+                    leftSliderGhost.setSize(25, HEIGHT);
+                }
+                catch (Exception e)
+                {
+                    JOptionPane.showMessageDialog(null, e);
+                }
+            }
+        };th.start();
+
+    }
+
+    private static void rightSliderMouseExit(MouseEvent event) {
+        Thread th = new Thread()
+        {
+            @Override
+            public void run()
+            {
+                try {
+                    for(int i = 0; i < 155; i++)
+                    {
+                        Thread.sleep(1);
+
+                        rightSlider.setBounds(95+i, 0, 155-i, HEIGHT);
+                    }
+                    rightSliderGhost.setBounds(200, 0, 25, HEIGHT);
                 }
                 catch (Exception e)
                 {
@@ -156,6 +237,7 @@ public class Display extends Canvas implements Runnable{
     }
 
     private static void mouseEnterMiddle(MouseEvent event) {
+        System.out.println("HERE");
 
         Thread th = new Thread()
         {
@@ -179,6 +261,7 @@ public class Display extends Canvas implements Runnable{
     }
 
     private static void initComponents(Display display) {
+
         // BIG PANEL
         bigPanel.setMinimumSize(new Dimension(WIDTH, HEIGHT));
         bigPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -188,10 +271,26 @@ public class Display extends Canvas implements Runnable{
         bigPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent event) {
-                if (leftOpen) {
-                    mouseEnterMiddle(event);
+                if (open) {
+                    leftSliderMouseExit(event);
                 }
-                leftOpen = false;
+                open = false;
+            }
+        });
+
+        //Right Big Panel
+        rightBigPanel.setMinimumSize(new Dimension(WIDTH, HEIGHT));
+        rightBigPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        rightBigPanel.setBounds(775, 0, 225, HEIGHT);
+        rightBigPanel.setBackground(Color.BLACK);
+
+        rightBigPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent event) {
+                if (rOpen){
+                    rightSliderMouseExit(event);
+                }
+                rOpen = false;
             }
         });
 
@@ -199,17 +298,33 @@ public class Display extends Canvas implements Runnable{
         leftSliderGhost.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent event) {
                 leftSliderMouseEnter(event);
-                leftOpen = true;
+                open = true;
             }
             public void mouseExited(MouseEvent event) {
-//                leftSliderMouseExit(event);
+                //leftSliderMouseExit(event);
             }
         });
+
+        //RIGHT PANEL
+        rightSliderGhost.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent event) {
+                rightSliderMouseEnter(event);
+                rOpen = true;
+            }
+            public void mouseExited(MouseEvent event) {
+//                rightSliderMouseExit(event);
+            }
+        });
+
 
         leftSlider.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         leftSliderGhost.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         leftSlider.setBackground(Color.WHITE);
         leftSliderGhost.setBackground(Color.BLACK);
+        rightSlider.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        rightSliderGhost.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        rightSlider.setBackground(Color.WHITE);
+        rightSliderGhost.setBackground(Color.BLACK);
 
         leftSlider.add(jSlider1, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 40, 145, -1));
         leftSlider.add(jSlider2, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 70, 145, -1));
@@ -222,6 +337,13 @@ public class Display extends Canvas implements Runnable{
         bigPanel.add(leftSlider, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 0, HEIGHT));
         bigPanel.add(leftSliderGhost, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 25, HEIGHT));
 
+        rightLabel.setText("Right Label");
+        rightLabel.setForeground(Color.BLUE);
+        rightSlider.add(rightLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(46, 268, 109, 64));
+        rightBigPanel.add(rightSlider, new org.netbeans.lib.awtextra.AbsoluteConstraints(225, 0, 0, HEIGHT));
+        rightBigPanel.add(rightSliderGhost, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 0, 25, HEIGHT));
+
+        display.frame.add(rightBigPanel);
         display.frame.add(bigPanel);
         display.frame.pack();
 
@@ -232,8 +354,8 @@ public class Display extends Canvas implements Runnable{
 //        initComponents();
         cellBox = new CellBox(51, 51, 51, 7);
         cellBox.rotate(0, 0, 60, lightVector);
-//        cellBox.populateRandom();
-        cellBox.createGlider();
+        cellBox.populateRandom();
+//        cellBox.createGlider();
 //        cellBox.populateCenter();
 //        cellBox.updateLife();
 

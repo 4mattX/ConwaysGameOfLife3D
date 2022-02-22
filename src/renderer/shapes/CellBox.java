@@ -196,14 +196,28 @@ public class CellBox {
 
     public Color colorAdjust(int x, int y, int z) {
 
-        int center = cells.length / 2;
-        int edge = amountX / 2;
+//        int center = cells.length / 2;
+//        int edge = amountX / 2;
+//
+//        int colorDif = (int) Math.sqrt((Math.pow(x - center, 2)) + (Math.pow(y - center, 2)) + (Math.pow(z - center, 2)));
+//        int maxDif = (int) Math.sqrt((Math.pow(center - edge, 2)) + (Math.pow(center - edge, 2)) + (Math.pow(center - edge, 2)));
+//        int newColorVal = Math.abs(maxDif - colorDif);
+//
+//        Color color = new Color(100, 0,  newColorVal * 5);
 
-        int colorDif = (int) Math.sqrt((Math.pow(x - center, 2)) + (Math.pow(y - center, 2)) + (Math.pow(z - center, 2)));
-        int maxDif = (int) Math.sqrt((Math.pow(center - edge, 2)) + (Math.pow(center - edge, 2)) + (Math.pow(center - edge, 2)));
-        int newColorVal = Math.abs(maxDif - colorDif);
+        int center = amountX / 2;
 
-        Color color = new Color(100, 0,  newColorVal * 5);
+        int distance = (int) (Math.sqrt(Math.pow(center - x, 2) + Math.pow(center - y, 2) + Math.pow(center - z, 2)));
+
+        int multiplier = (int) 255 / (distance + 1);
+
+        int redDif = (Math.abs(center - x) + 20);
+        int greenDif = (Math.abs(center - y) + 20) * 2;
+        int blueDif = (Math.abs(center - z) + 20) * 4;
+
+        Color color = null;
+
+        color = new Color((distance + 10) * 4 + 20, greenDif + 20, (distance) * 4);
 
         return color;
     }
@@ -268,16 +282,16 @@ public class CellBox {
         int y = amountY / 2;
         int z = amountZ / 2;
 
-//        cellsArray[x][y][z].revive();
-//        cellsArray[x][y][z + 1].revive();
-//        cellsArray[x][y - 1][z].revive();
-//        cellsArray[x][y - 1][z + 1].revive();
-//        cellsArray[x - 1][y + 1][z].revive();
-//        cellsArray[x - 1][y + 1][z + 1].revive();
-//        cellsArray[x - 1][y][z - 1].revive();
-//        cellsArray[x - 1][y - 1][z - 1].revive();
-//        cellsArray[x - 1][y][z + 1].revive();
-//        cellsArray[x - 1][y - 1][z + 1].revive();
+        cellsArray[x][y][z].revive();
+        cellsArray[x][y][z + 1].revive();
+        cellsArray[x][y - 1][z].revive();
+        cellsArray[x][y - 1][z + 1].revive();
+        cellsArray[x - 1][y + 1][z].revive();
+        cellsArray[x - 1][y + 1][z + 1].revive();
+        cellsArray[x - 1][y][z - 1].revive();
+        cellsArray[x - 1][y - 1][z - 1].revive();
+        cellsArray[x - 1][y][z + 1].revive();
+        cellsArray[x - 1][y - 1][z + 1].revive();
 
         cellsArray[x][y][z].revive();
         cellsArray[x][y - 1][z].revive();
@@ -401,7 +415,7 @@ public class CellBox {
                         }
 
                         if (cell.isAlive()) {
-                            if (amountAlive == 4 || amountAlive == 5) {
+                            if (amountAlive == 4 || amountAlive == 5 || amountAlive > 12) {
                                 cellCopy.kill();
                                 continue;
                             }
