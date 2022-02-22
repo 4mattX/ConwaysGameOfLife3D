@@ -82,6 +82,7 @@ public class Display extends Canvas implements Runnable{
         // Initializes objects in display
         init();
 
+
         while (running) {
             long now = System.nanoTime();
             delta += (now - lastTime) / ns;
@@ -331,13 +332,13 @@ public class Display extends Canvas implements Runnable{
         leftSlider.add(jSlider3, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 100, 145, -1));
         leftSlider.add(jSlider4, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 130, 145, -1));
 
-        leftLabel1.setText("Left Label 1");
+        leftLabel1.setText("Rules");
         leftLabel1.setForeground(Color.RED);
         leftSlider.add(leftLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(46, 268, 109, 64));
         bigPanel.add(leftSlider, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 0, HEIGHT));
         bigPanel.add(leftSliderGhost, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 25, HEIGHT));
 
-        rightLabel.setText("Right Label");
+        rightLabel.setText("Organisms");
         rightLabel.setForeground(Color.BLUE);
         rightSlider.add(rightLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(46, 268, 109, 64));
         rightBigPanel.add(rightSlider, new org.netbeans.lib.awtextra.AbsoluteConstraints(225, 0, 0, HEIGHT));

@@ -217,7 +217,7 @@ public class CellBox {
 
         Color color = null;
 
-        color = new Color((distance + 10) * 4 + 20, greenDif + 20, (distance) * 4);
+        color = new Color((distance + 10) * 4 + 20, greenDif + 20, (distance) * 4 + 10);
 
         return color;
     }
@@ -415,12 +415,11 @@ public class CellBox {
                         }
 
                         if (cell.isAlive()) {
-                            if (amountAlive == 4 || amountAlive == 5 || amountAlive > 12) {
+                            if (amountAlive == 4 || amountAlive == 5 || amountAlive > 11) {
                                 cellCopy.kill();
                                 continue;
                             }
                         }
-
 
                         if (!cell.isAlive()) {
                             if (amountAlive == 5) {
@@ -428,8 +427,6 @@ public class CellBox {
                                 continue;
                             }
                         }
-
-
 
                     } catch (ArrayIndexOutOfBoundsException exception) {
                         cellsArrayCopy[x][y][z].kill();

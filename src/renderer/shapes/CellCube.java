@@ -31,9 +31,14 @@ public class CellCube {
 
 
     public void render(Graphics g) {
-        for (CellPolygon poly : this.polygons) {
-            poly.render(g);
+//        for (CellPolygon poly : this.polygons) {
+//            poly.render(g);
+//        }
+
+        for (int i = this.polygons.length - 1; i > 2; i--) {
+            this.polygons[i].render(g);
         }
+
     }
 
     public void renderFrontOutline(Graphics g) {
