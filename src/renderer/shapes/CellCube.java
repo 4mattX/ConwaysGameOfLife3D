@@ -129,6 +129,7 @@ public class CellCube {
     }
 
     public void kill() {
+        this.age = 0;
         this.alive = false;
     }
 
