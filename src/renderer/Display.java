@@ -462,19 +462,19 @@ public class Display extends Canvas implements Runnable {
     private void init() {
         cellBox = new CellBox(WORLD_SIZE, WORLD_SIZE, WORLD_SIZE, CELL_SIZE);
         cellBox.rotate(0, 0, 60, lightVector);
-//        cellBox.populateRandom();
-        cellBox.createGlider();
+        cellBox.populateRandom();
+//        cellBox.populateOdd();
     }
 
     private static void resetLife() {
         cellBox = new CellBox(WORLD_SIZE, WORLD_SIZE, WORLD_SIZE, CELL_SIZE);
         cellBox.rotate(0, 0, 60, lightVector);
-
-        cellBox.createGlider();
+        cellBox.populateRandom();
+//        cellBox.populateOdd();
     }
 
     private void update() {
-//        cellBox.updateLife();
+        cellBox.updateLife();
     }
 
     public static void main(String[] args) {

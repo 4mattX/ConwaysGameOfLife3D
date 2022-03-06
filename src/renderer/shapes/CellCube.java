@@ -14,6 +14,10 @@ public class CellCube {
     private int indexOfCellBox;
     private int age;
     private int MAX_AGE;
+    private double x;
+    private double y;
+    private double z;
+    private int size;
 
     public CellCube(double x, double y, double z, int size, boolean alive) {
         this.alive = alive;
@@ -22,6 +26,13 @@ public class CellCube {
     }
 
     public CellCube(double x, double y, double z, int size, boolean alive, Color color) {
+
+        this.setX(x);
+        this.setY(y);
+        this.setZ(z);
+        this.setSize(size);
+
+
         this.alive = alive;
         this.color = color;
         createCellCube(x, y, z, size);
@@ -161,7 +172,43 @@ public class CellCube {
         this.age = age;
     }
 
+    public int getMaxAge() {
+        return this.MAX_AGE;
+    }
+
     public void setMaxAge(int age) {
         this.MAX_AGE = age;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public double getZ() {
+        return z;
+    }
+
+    public void setZ(double z) {
+        this.z = z;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
     }
 }
