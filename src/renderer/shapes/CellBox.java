@@ -297,23 +297,69 @@ public class CellBox {
         int y = amountY / 2;
         int z = amountZ / 2;
 
-        cellsArray[x][y][z].revive();
-        cellsArray[x][y][z + 1].revive();
-        cellsArray[x][y - 1][z].revive();
-        cellsArray[x][y - 1][z + 1].revive();
-        cellsArray[x - 1][y + 1][z].revive();
-        cellsArray[x - 1][y + 1][z + 1].revive();
-        cellsArray[x - 1][y][z - 1].revive();
-        cellsArray[x - 1][y - 1][z - 1].revive();
-        cellsArray[x - 1][y][z + 1].revive();
-        cellsArray[x - 1][y - 1][z + 1].revive();
+//        cellsArray[x][y][z].revive();
+//        cellsArray[x][y][z + 1].revive();
+//        cellsArray[x][y - 1][z].revive();
+//        cellsArray[x][y - 1][z + 1].revive();
+//        cellsArray[x - 1][y + 1][z].revive();
+//        cellsArray[x - 1][y + 1][z + 1].revive();
+//        cellsArray[x - 1][y][z - 1].revive();
+//        cellsArray[x - 1][y - 1][z - 1].revive();
+//        cellsArray[x - 1][y][z + 1].revive();
+//        cellsArray[x - 1][y - 1][z + 1].revive();
 
-        cellsArray[x][y][z].revive();
-        cellsArray[x][y - 1][z].revive();
-        cellsArray[x - 1][y][z].revive();
-        cellsArray[x - 1][y - 1][z].revive();
-        cellsArray[x - 1][y][z + 1].revive();
-        cellsArray[x - 1][y - 1][z + 1].revive();
+        int[] glider = {0, 0, 0,
+                        0, 1, 0,
+                        0, 0, 0,
+
+                        0, 1, 0,
+                        1, 0, 1,
+                        1, 0, 1,
+
+                        0, 0, 0,
+                        0, 1, 0,
+                        0, 0, 0};
+
+        int cellCounter = 0;
+
+        for (int i = -1; i <= 1; i++) {
+            if (glider[cellCounter] == 1) {
+                cellsArray[x + 1][y + i][z - 1].revive();
+            }
+            cellCounter++;
+            if (glider[cellCounter] == 1) {
+                cellsArray[x + 1][y + i][z].revive();
+            }
+            cellCounter++;
+            if (glider[cellCounter] == 1) {
+                cellsArray[x + 1][y + i][z + 1].revive();
+            }
+            cellCounter++;
+            if (glider[cellCounter] == 1) {
+                cellsArray[x][y + i][z - 1].revive();
+            }
+            cellCounter++;
+            if (glider[cellCounter] == 1) {
+                cellsArray[x][y + i][z].revive();
+            }
+            cellCounter++;
+            if (glider[cellCounter] == 1) {
+                cellsArray[x][y + i][z + 1].revive();
+            }
+            cellCounter++;
+            if (glider[cellCounter] == 1) {
+                cellsArray[x - 1][y + i][z - 1].revive();
+            }
+            cellCounter++;
+            if (glider[cellCounter] == 1) {
+                cellsArray[x - 1][y + i][z].revive();
+            }
+            cellCounter++;
+            if (glider[cellCounter] == 1) {
+                cellsArray[x - 1][y + i][z + 1].revive();
+            }
+            cellCounter++;
+        }
 
     }
 
@@ -347,7 +393,6 @@ public class CellBox {
     }
 
     public void updateLife() {
-        copyCells();
 
         int amountAlive = 0;
 
@@ -359,97 +404,86 @@ public class CellBox {
                     CellCube cellCopy = cellsArrayCopy[x][y][z];
                     amountAlive = 0;
 
-                    try {
-                        for (int layer = -1; layer <= 1; layer++) {
-
-                            if (cellsArray[x + 1][y + layer][z - 1].isAlive()) {
-                                amountAlive++;
-                            }
-
-                            if (cellsArray[x + 1][y + layer][z].isAlive()) {
-                                amountAlive++;
-                            }
-
-                            if (cellsArray[x + 1][y + layer][z + 1].isAlive()) {
-                                amountAlive++;
-                            }
-
-                            if (cellsArray[x][y + layer][z - 1].isAlive()) {
-                                amountAlive++;
-                            }
-
-                            if (cellsArray[x][y + layer][z].isAlive()) {
-                                if (layer != 0) {
-                                    amountAlive++;
-                                }
-                            }
-
-                            if (cellsArray[x][y + layer][z + 1].isAlive()) {
-                                amountAlive++;
-                            }
-
-                            if (cellsArray[x - 1][y + layer][z - 1].isAlive()) {
-                                amountAlive++;
-                            }
-
-                            if (cellsArray[x - 1][y + layer][z].isAlive()) {
-                                amountAlive++;
-                            }
-
-                            if (cellsArray[x - 1][y + layer][z + 1].isAlive()) {
-                                amountAlive++;
-                            }
-                        }
-
-                        if (cell.isAlive()) {
-                            boolean shouldSurvive = false;
-                            for (int i = 0; i < surviveList.size(); i++) {
-                                if (amountAlive == surviveList.get(i)) {
-                                    shouldSurvive = true;
-                                }
-                            }
-
-                            if (!shouldSurvive) {
-                                cellCopy.kill();
-                            }
-                        }
-
-//                        if (cell.isAlive()) {
-//                            if (amountAlive != 4) {
-//                                cellCopy.kill();
-//                            }
-//                        }
-
-//                        if (!cell.isAlive()) {
-//                            if (amountAlive == 4) {
-//                                cellCopy.revive();
-//                            }
-//                        }
-
-                        if (!cell.isAlive()) {
-                            boolean shouldRevive = false;
-                            for (int i = 0; i < bornList.size(); i++) {
-                                if (amountAlive == bornList.get(i)) {
-                                    shouldRevive = true;
-                                }
-                            }
-                            if (shouldRevive) {
-                                cellCopy.revive();
-                            }
-                        }
-
-                        if (cell.isAlive()) {
-                            cellCopy.age();
-                        }
-
-                    } catch (ArrayIndexOutOfBoundsException exception) {
-                        cellCopy.kill();
+                    if (x == amountX-1 || y == amountY-1 || z == amountZ-1 || x == 0 || y == 0 || z == 0) {
+                        continue;
                     }
+
+                    for (int layer = -1; layer <= 1; layer++) {
+
+                        if (cellsArray[x + 1][y + layer][z - 1].isAlive()) {
+                            amountAlive++;
+                        }
+
+                        if (cellsArray[x + 1][y + layer][z].isAlive()) {
+                            amountAlive++;
+                        }
+
+                        if (cellsArray[x + 1][y + layer][z + 1].isAlive()) {
+                            amountAlive++;
+                        }
+
+                        if (cellsArray[x][y + layer][z - 1].isAlive()) {
+                            amountAlive++;
+                        }
+
+                        if (cellsArray[x][y + layer][z].isAlive()) {
+                            if (layer != 0) {
+                                amountAlive++;
+                            }
+                        }
+
+                        if (cellsArray[x][y + layer][z + 1].isAlive()) {
+                            amountAlive++;
+                        }
+
+                        if (cellsArray[x - 1][y + layer][z - 1].isAlive()) {
+                            amountAlive++;
+                        }
+
+                        if (cellsArray[x - 1][y + layer][z].isAlive()) {
+                            amountAlive++;
+                        }
+
+                        if (cellsArray[x - 1][y + layer][z + 1].isAlive()) {
+                            amountAlive++;
+                        }
+                    }
+
+                    if (cell.isAlive()) {
+                        boolean shouldSurvive = false;
+                        for (int i = 0; i < surviveList.size(); i++) {
+                            if (amountAlive == surviveList.get(i)) {
+                                shouldSurvive = true;
+                            }
+                        }
+
+                        if (!shouldSurvive) {
+                            cellCopy.kill();
+                        }
+                    }
+
+                    if (!cell.isAlive()) {
+                        boolean shouldRevive = false;
+                        for (int i = 0; i < bornList.size(); i++) {
+                            if (amountAlive == bornList.get(i)) {
+                                shouldRevive = true;
+                            }
+                        }
+                        if (shouldRevive) {
+                            cellCopy.revive();
+                        }
+                    }
+
+                    if (cell.isAlive()) {
+                        cellCopy.age();
+                    }
+
+
 
                 }
             }
         }
-
+        copyCells();
     }
 
 

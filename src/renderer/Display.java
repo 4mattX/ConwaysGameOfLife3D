@@ -8,6 +8,8 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferStrategy;
@@ -255,6 +257,25 @@ public class Display extends Canvas implements Runnable {
 
     private static void initComponents(Display display) {
 
+        display.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyChar() == 'm') {
+                    cellBox.updateLife();
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
+
         // BIG PANEL
         leftBigPanel.setMinimumSize(new Dimension(WIDTH, HEIGHT));
         leftBigPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -442,19 +463,18 @@ public class Display extends Canvas implements Runnable {
         cellBox = new CellBox(WORLD_SIZE, WORLD_SIZE, WORLD_SIZE, CELL_SIZE);
         cellBox.rotate(0, 0, 60, lightVector);
 //        cellBox.populateRandom();
-        cellBox.populateRandom();
+        cellBox.createGlider();
     }
 
     private static void resetLife() {
         cellBox = new CellBox(WORLD_SIZE, WORLD_SIZE, WORLD_SIZE, CELL_SIZE);
         cellBox.rotate(0, 0, 60, lightVector);
 
-        cellBox.populateRandom();
-
+        cellBox.createGlider();
     }
 
     private void update() {
-        cellBox.updateLife();
+//        cellBox.updateLife();
     }
 
     public static void main(String[] args) {

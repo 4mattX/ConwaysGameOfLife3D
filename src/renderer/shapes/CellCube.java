@@ -57,8 +57,6 @@ public class CellCube {
         }
     }
 
-
-
     // Sorts the polygons such that faces in front are displayed in front of rear faces
     public void sortPolygons() {
         CellPolygon.sortPolygons(this.polygons);
