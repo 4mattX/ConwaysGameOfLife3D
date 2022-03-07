@@ -41,6 +41,7 @@ public class Display extends Canvas implements Runnable {
 
     private static boolean open = false;
     private static boolean rOpen = false;
+    private static boolean pause = false;
 
     public static final int WIDTH = 1000;
     public static final int HEIGHT = 600;
@@ -273,6 +274,16 @@ public class Display extends Canvas implements Runnable {
                     cellBox.clearMiddleArea();
                 }
 
+                if (e.getKeyChar() == ' ') {
+                    if (pause) {
+                        pause = false;
+                    } else {
+                        pause = true;
+                    }
+                }
+
+
+
             }
 
             @Override
@@ -472,12 +483,14 @@ public class Display extends Canvas implements Runnable {
     private static void resetLife() {
         cellBox = new CellBox(WORLD_SIZE, WORLD_SIZE, WORLD_SIZE, CELL_SIZE);
         cellBox.rotate(0, 0, 60, lightVector);
-        cellBox.createGlider();
-//        cellBox.populateRandom();
+//        cellBox.createGlider();
+        cellBox.populateRandom();
     }
 
     private void update() {
-        cellBox.updateLife();
+        if (!pause) {
+            cellBox.updateLife();
+        }
     }
 
     public static void main(String[] args) {
