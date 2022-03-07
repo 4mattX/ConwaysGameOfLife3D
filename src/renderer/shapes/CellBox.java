@@ -209,10 +209,12 @@ public class CellBox {
         int greenDif = (Math.abs(center - y) + 20) * 2;
         int blueDif = (Math.abs(center - z) + 20) * 4;
 
+        int distanceBack = (x + z) / 4;
+
         Color color = null;
 
 //        color = new Color((distance + 10) * 4 + 20, greenDif + 20, (distance) * 4 + 10);
-        color = new Color(100, greenDif, blueDif);
+        color = new Color(100 + distanceBack, greenDif + distanceBack, blueDif + distanceBack);
 
         return color;
     }
@@ -248,7 +250,7 @@ public class CellBox {
     }
 
     public void populateOdd() {
-        int radius = 5;
+        int radius = 7;
 
         for (int x = (amountX / 2) - radius; x < (amountX / 2) + radius; x++) {
             for (int y = (amountY / 2) - radius; y < (amountY / 2) + radius; y++) {
@@ -268,22 +270,38 @@ public class CellBox {
         }
     }
 
+    public void clearMiddleArea() {
+
+        int radius = amountX / 2;
+
+        for (int x = (amountX / 2) - radius; x < (amountX / 2) + radius; x++) {
+            for (int y = (amountY / 2) - radius; y < (amountY / 2) + radius; y++) {
+                for (int z = (amountZ / 2) - radius; z < (amountZ / 2) + radius; z++) {
+
+                    cellsArray[x][y][z].kill();
+                    cellsArrayCopy[x][y][z].kill();
+
+                }
+            }
+        }
+    }
+
     public void createGlider() {
         // 4555 Glider
         int x = amountX / 2;
         int y = amountY / 2;
         int z = amountZ / 2;
-        int[] glider = {0, 0, 0,
-                        0, 1, 0,
+        int[] glider = {1, 1, 0,
+                        1, 1, 0,
                         0, 0, 0,
 
-                        0, 1, 0,
-                        1, 0, 1,
-                        1, 0, 1,
+                        1, 1, 0,
+                        1, 1, 1,
+                        0, 1, 1,
 
                         0, 0, 0,
-                        0, 1, 0,
-                        0, 0, 0};
+                        0, 1, 1,
+                        0, 1, 1};
 
         int cellCounter = 0;
 
@@ -364,50 +382,92 @@ public class CellBox {
 
         int cellCounter = 0;
 
-        for (int x = 0; x < amountX; x++) {
-            for (int y = 0; y < amountY; y++) {
-                for (int z = 0; z < amountZ; z++) {
+        for (int xOriginal = 0; xOriginal < amountX; xOriginal++) {
+            for (int yOriginal = 0; yOriginal < amountY; yOriginal++) {
+                for (int zOriginal = 0; zOriginal < amountZ; zOriginal++) {
+
+//                    if (x == amountX-1 || y == amountY-1 || z == amountZ-1 || x == 0 || y == 0 || z == 0) {
+//                        continue;
+//                    }
+                    int x = xOriginal;
+                    int y = yOriginal;
+                    int z = zOriginal;
 
                     CellCube cell = this.cellsArray[x][y][z];
                     CellCube cellCopy = this.cellsArrayCopy[x][y][z];
 
-                    if (x == amountX-1 || y == amountY-1 || z == amountZ-1 || x == 0 || y == 0 || z == 0) {
-                        continue;
+                    if (xOriginal > amountX - 2) {
+                        x = 1;
                     }
+
+                    if (yOriginal > amountY - 2) {
+                        y = 1;
+                    }
+
+                    if (zOriginal > amountZ - 2) {
+                        z = 1;
+                    }
+
+                    if (xOriginal < 1) {
+                        x = amountX - 2;
+                    }
+
+                    if (yOriginal < 1) {
+                        y = amountY - 2;
+                    }
+
+                    if (zOriginal < 1) {
+                        z = amountZ - 2;
+                    }
+
 
                     amountAlive = 0;
 
                     for (int layer = -1; layer <= 1; layer++) {
 
-                        if (cellsArray[x + 1][y + layer][z - 1].isAlive()) {
-                            amountAlive++;
-                        }
 
-                        if (cellsArray[x + 1][y + layer][z].isAlive()) {
-                            amountAlive++;
-                        }
-
-                        if (cellsArray[x + 1][y + layer][z + 1].isAlive()) {
-                            amountAlive++;
-                        }
-
-                        if (cellsArray[x][y + layer][z - 1].isAlive()) {
-                            amountAlive++;
-                        }
-
-                        if (cellsArray[x][y + layer][z].isAlive()) {
-                            if (layer != 0) {
+                            if (cellsArray[x + 1][y + layer][z - 1].isAlive()) {
                                 amountAlive++;
                             }
-                        }
 
-                        if (cellsArray[x][y + layer][z + 1].isAlive()) {
-                            amountAlive++;
-                        }
 
-                        if (cellsArray[x - 1][y + layer][z - 1].isAlive()) {
-                            amountAlive++;
-                        }
+
+                            if (cellsArray[x + 1][y + layer][z].isAlive()) {
+                                amountAlive++;
+                            }
+
+
+
+                            if (cellsArray[x + 1][y + layer][z + 1].isAlive()) {
+                                amountAlive++;
+                            }
+
+
+                            if (cellsArray[x][y + layer][z - 1].isAlive()) {
+                                amountAlive++;
+                            }
+
+
+
+                            if (cellsArray[x][y + layer][z].isAlive()) {
+                                if (layer != 0) {
+                                    amountAlive++;
+                                }
+                            }
+
+
+
+                            if (cellsArray[x][y + layer][z + 1].isAlive()) {
+                                amountAlive++;
+                            }
+
+
+
+                            if (cellsArray[x - 1][y + layer][z - 1].isAlive()) {
+                                amountAlive++;
+                            }
+
+
 
                         if (cellsArray[x - 1][y + layer][z].isAlive()) {
                             amountAlive++;
@@ -445,7 +505,9 @@ public class CellBox {
                     }
 
                     if (cell.isAlive()) {
-                        cellCopy.age();
+                        if (cell.getMaxAge() != 0) {
+                            cellCopy.age();
+                        }
                     }
 
 

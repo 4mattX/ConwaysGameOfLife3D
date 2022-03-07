@@ -268,6 +268,11 @@ public class Display extends Canvas implements Runnable {
                 if (e.getKeyChar() == 'm') {
                     cellBox.updateLife();
                 }
+
+                if (e.getKeyChar() == 'n') {
+                    cellBox.clearMiddleArea();
+                }
+
             }
 
             @Override
@@ -462,15 +467,13 @@ public class Display extends Canvas implements Runnable {
     private void init() {
         cellBox = new CellBox(WORLD_SIZE, WORLD_SIZE, WORLD_SIZE, CELL_SIZE);
         cellBox.rotate(0, 0, 60, lightVector);
-        cellBox.populateRandom();
-//        cellBox.populateOdd();
     }
 
     private static void resetLife() {
         cellBox = new CellBox(WORLD_SIZE, WORLD_SIZE, WORLD_SIZE, CELL_SIZE);
         cellBox.rotate(0, 0, 60, lightVector);
-        cellBox.populateRandom();
-//        cellBox.populateOdd();
+        cellBox.createGlider();
+//        cellBox.populateRandom();
     }
 
     private void update() {
