@@ -291,17 +291,20 @@ public class CellBox {
         int x = amountX / 2;
         int y = amountY / 2;
         int z = amountZ / 2;
-        int[] glider = {1, 1, 0,
-                        1, 1, 0,
-                        0, 0, 0,
 
-                        0, 1, 0,
-                        1, 1, 1,
-                        0, 1, 0,
+        int[] glider;
 
-                        0, 0, 0,
-                        0, 1, 1,
-                        0, 1, 1};
+        glider = new int[] {1, 1, 0,
+                            1, 1, 0,
+                            0, 0, 0,
+
+                            0, 1, 0,
+                            1, 1, 1,
+                            0, 1, 0,
+
+                            0, 0, 0,
+                            0, 1, 1,
+                            0, 1, 1};
 
         int cellCounter = 0;
 
@@ -386,9 +389,6 @@ public class CellBox {
             for (int yOriginal = 0; yOriginal < amountY; yOriginal++) {
                 for (int zOriginal = 0; zOriginal < amountZ; zOriginal++) {
 
-//                    if (x == amountX-1 || y == amountY-1 || z == amountZ-1 || x == 0 || y == 0 || z == 0) {
-//                        continue;
-//                    }
                     int x = xOriginal;
                     int y = yOriginal;
                     int z = zOriginal;
