@@ -24,7 +24,7 @@ public class Display extends Canvas implements Runnable {
     private static JPanel rightBigPanel = new JPanel();
     private static JPanel leftBigPanel = new JPanel();
     private static JPanel leftPanel = new JPanel();
-    private static JPanel rightSlider = new JPanel();
+    private static JPanel rightPanel = new JPanel();
     private static JPanel leftPanelGhost = new JPanel();
     private static JPanel rightPanelGhost = new JPanel();
     private static JLabel bornLabel = new JLabel();
@@ -33,6 +33,7 @@ public class Display extends Canvas implements Runnable {
 
     private static JToggleButton[] bornButtons = new JToggleButton[26];
     private static JToggleButton[] surviveButtons = new JToggleButton[26];
+
 
     private static JSlider ageSlider = new JSlider();
     private static JSlider worldSlider = new JSlider();
@@ -186,7 +187,7 @@ public class Display extends Canvas implements Runnable {
                 try {
                     for (int j = 0; j < 155; j++) {
                         Thread.sleep(1);
-                        rightSlider.setBounds(225 - j, 0, j, HEIGHT);
+                        rightPanel.setBounds(225 - j, 0, j, HEIGHT);
                     }
                     rightPanelGhost.setBounds(65, 0, 160, HEIGHT);
                 } catch (Exception e) {
@@ -244,7 +245,7 @@ public class Display extends Canvas implements Runnable {
                     for (int i = 0; i < 155; i++) {
                         Thread.sleep(1);
 
-                        rightSlider.setBounds(95 + i, 0, 155 - i, HEIGHT);
+                        rightPanel.setBounds(95 + i, 0, 155 - i, HEIGHT);
                     }
                     rightPanelGhost.setBounds(200, 0, 25, HEIGHT);
                 } catch (Exception e) {
@@ -353,9 +354,9 @@ public class Display extends Canvas implements Runnable {
         leftPanelGhost.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         leftPanel.setBackground(Color.WHITE);
         leftPanelGhost.setBackground(Color.BLACK);
-        rightSlider.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        rightPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         rightPanelGhost.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        rightSlider.setBackground(Color.WHITE);
+        rightPanel.setBackground(Color.WHITE);
         rightPanelGhost.setBackground(Color.BLACK);
 
         createSliderValues();
@@ -387,13 +388,26 @@ public class Display extends Canvas implements Runnable {
             leftPanel.add(surviveButtons[i], new org.netbeans.lib.awtextra.AbsoluteConstraints(135, 245 + (i * 13), 24, 12));
         }
 
+        JRadioButton[] jRadioButtons = new JRadioButton[4];
+        JLabel[] organismLabels = new JLabel[4];
+        ButtonGroup buttonGroup = new ButtonGroup();
+
+        for (int i = 0; i < jRadioButtons.length; i++) {
+            jRadioButtons[i] = new JRadioButton();
+            organismLabels[i] = new JLabel();
+            organismLabels[i].setText("Organism " + i);
+            rightPanel.add(organismLabels[i],  new org.netbeans.lib.awtextra.AbsoluteConstraints(75, 100 + (i * 50), 100, 12));
+            rightPanel.add(jRadioButtons[i], new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100 + (i * 50), 24, 12));
+            buttonGroup.add(jRadioButtons[i]);
+        }
+
         leftBigPanel.add(leftPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 0, HEIGHT));
         leftBigPanel.add(leftPanelGhost, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 25, HEIGHT));
 
         rightLabel.setText("Organisms");
         rightLabel.setForeground(Color.BLUE);
-        rightSlider.add(rightLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(46, 268, 109, 64));
-        rightBigPanel.add(rightSlider, new org.netbeans.lib.awtextra.AbsoluteConstraints(225, 0, 0, HEIGHT));
+        rightPanel.add(rightLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(46, 268, 109, 64));
+        rightBigPanel.add(rightPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(225, 0, 0, HEIGHT));
         rightBigPanel.add(rightPanelGhost, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 0, 25, HEIGHT));
 
         display.frame.add(rightBigPanel);
