@@ -8,10 +8,7 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +40,7 @@ public class Display extends Canvas implements Runnable {
     private static boolean open = false;
     private static boolean rOpen = false;
     private static boolean pause = false;
+    private static int organismID = 0;
 
     public static final int WIDTH = 1000;
     public static final int HEIGHT = 600;
@@ -248,6 +246,8 @@ public class Display extends Canvas implements Runnable {
                         rightPanel.setBounds(95 + i, 0, 155 - i, HEIGHT);
                     }
                     rightPanelGhost.setBounds(200, 0, 25, HEIGHT);
+
+                    resetLife();
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, e);
                 }
@@ -388,8 +388,8 @@ public class Display extends Canvas implements Runnable {
             leftPanel.add(surviveButtons[i], new org.netbeans.lib.awtextra.AbsoluteConstraints(135, 245 + (i * 13), 24, 12));
         }
 
-        JRadioButton[] jRadioButtons = new JRadioButton[4];
-        JLabel[] organismLabels = new JLabel[4];
+        JRadioButton[] jRadioButtons = new JRadioButton[3];
+        JLabel[] organismLabels = new JLabel[3];
         ButtonGroup buttonGroup = new ButtonGroup();
 
         for (int i = 0; i < jRadioButtons.length; i++) {
@@ -399,6 +399,8 @@ public class Display extends Canvas implements Runnable {
             rightPanel.add(organismLabels[i],  new org.netbeans.lib.awtextra.AbsoluteConstraints(75, 100 + (i * 50), 100, 12));
             rightPanel.add(jRadioButtons[i], new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100 + (i * 50), 24, 12));
             buttonGroup.add(jRadioButtons[i]);
+            int finalI = i;
+            jRadioButtons[i].addActionListener(e -> organismID = finalI);
         }
 
         leftBigPanel.add(leftPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 0, HEIGHT));
@@ -497,8 +499,17 @@ public class Display extends Canvas implements Runnable {
     private static void resetLife() {
         cellBox = new CellBox(WORLD_SIZE, WORLD_SIZE, WORLD_SIZE, CELL_SIZE);
         cellBox.rotate(0, 0, 60, lightVector);
-//        cellBox.createGlider();
-        cellBox.populateRandom();
+        switch (organismID) {
+            case 0:
+                cellBox.populateRandom();
+                break;
+            case 1:
+                cellBox.createGlider();
+                break;
+            case 2:
+                cellBox.populateOdd();
+                break;
+        }
     }
 
     private void update() {
