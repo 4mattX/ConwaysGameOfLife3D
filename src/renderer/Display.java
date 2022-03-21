@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Display extends Canvas implements Runnable {
@@ -31,6 +32,7 @@ public class Display extends Canvas implements Runnable {
     private static JToggleButton[] bornButtons = new JToggleButton[26];
     private static JToggleButton[] surviveButtons = new JToggleButton[26];
 
+    private static List<String> organismNames = Arrays.asList("RandomBlob", "4-4Star", "4-4Dancer", "Pillars");
 
     private static JSlider ageSlider = new JSlider();
     private static JSlider worldSlider = new JSlider();
@@ -145,6 +147,8 @@ public class Display extends Canvas implements Runnable {
 
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, WIDTH * 2, HEIGHT * 2);
+        g.setColor(new Color(71, 71, 71));
+        g.drawString("[SPACE] = Pause    [N] = Delete Center     [M] = Next Life Iteration", (WIDTH / 2) - 160, HEIGHT - 5);
     }
 
     private static void leftSliderMouseEnter(MouseEvent event) {
@@ -210,7 +214,7 @@ public class Display extends Canvas implements Runnable {
                         Thread.sleep(1);
                         leftPanel.setSize(i, HEIGHT);
                     }
-                    leftPanelGhost.setSize(25, HEIGHT);
+                    leftPanelGhost.setSize(60, HEIGHT);
                     leftPanel.setBackground(Color.BLACK);
 
                     for (int i = 0; i < bornButtons.length; i++) {
@@ -245,7 +249,7 @@ public class Display extends Canvas implements Runnable {
 
                         rightPanel.setBounds(95 + i, 0, 155 - i, HEIGHT);
                     }
-                    rightPanelGhost.setBounds(200, 0, 25, HEIGHT);
+                    rightPanelGhost.setBounds(165, 0, 60, HEIGHT);
 
                     resetLife();
                 } catch (Exception e) {
@@ -388,29 +392,38 @@ public class Display extends Canvas implements Runnable {
             leftPanel.add(surviveButtons[i], new org.netbeans.lib.awtextra.AbsoluteConstraints(135, 245 + (i * 13), 24, 12));
         }
 
-        JRadioButton[] jRadioButtons = new JRadioButton[3];
-        JLabel[] organismLabels = new JLabel[3];
+        JRadioButton[] jRadioButtons = new JRadioButton[4];
+        JLabel[] organismLabels = new JLabel[4];
         ButtonGroup buttonGroup = new ButtonGroup();
 
         for (int i = 0; i < jRadioButtons.length; i++) {
             jRadioButtons[i] = new JRadioButton();
             organismLabels[i] = new JLabel();
-            organismLabels[i].setText("Organism " + i);
-            rightPanel.add(organismLabels[i],  new org.netbeans.lib.awtextra.AbsoluteConstraints(75, 100 + (i * 50), 100, 12));
-            rightPanel.add(jRadioButtons[i], new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100 + (i * 50), 24, 12));
+            organismLabels[i].setText(organismNames.get(i));
+            organismLabels[i].setIcon(new ImageIcon("life" + i + ".png"));
+            rightPanel.add(organismLabels[i],  new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100 + (i * 50), 150, 50));
+            rightPanel.add(jRadioButtons[i], new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100 + (i * 50), 20, 50));
             buttonGroup.add(jRadioButtons[i]);
             int finalI = i;
             jRadioButtons[i].addActionListener(e -> organismID = finalI);
         }
 
-        leftBigPanel.add(leftPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 0, HEIGHT));
-        leftBigPanel.add(leftPanelGhost, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 25, HEIGHT));
+        // Left Arrow Icon
+        ImageIcon leftArrowIcon = new ImageIcon("left_arrow.png");
+        JLabel leftArrowLabel = new JLabel(leftArrowIcon, JLabel.CENTER);
+        leftPanelGhost.add(leftArrowLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, (HEIGHT / 2) - leftArrowIcon.getIconHeight(), leftArrowIcon.getIconHeight() - 15, -1));
 
-        rightLabel.setText("Organisms");
-        rightLabel.setForeground(Color.BLUE);
+        // Right Arrow Icon
+        ImageIcon rightArrowIcon = new ImageIcon("right_arrow.png");
+        JLabel rightArrowLabel = new JLabel(rightArrowIcon, JLabel.CENTER);
+        rightPanelGhost.add(rightArrowLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, (HEIGHT / 2) - rightArrowIcon.getIconHeight(), 50, -1));
+
+        leftBigPanel.add(leftPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 0, HEIGHT));
+        leftBigPanel.add(leftPanelGhost, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 60, HEIGHT));
+
         rightPanel.add(rightLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(46, 268, 109, 64));
         rightBigPanel.add(rightPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(225, 0, 0, HEIGHT));
-        rightBigPanel.add(rightPanelGhost, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 0, 25, HEIGHT));
+        rightBigPanel.add(rightPanelGhost, new org.netbeans.lib.awtextra.AbsoluteConstraints(165, 0, 60, HEIGHT));
 
         display.frame.add(rightBigPanel);
         display.frame.add(leftBigPanel);
@@ -504,9 +517,12 @@ public class Display extends Canvas implements Runnable {
                 cellBox.populateRandom();
                 break;
             case 1:
-                cellBox.createGlider();
+                cellBox.createGlider(0);
                 break;
             case 2:
+                cellBox.createGlider(1);
+                break;
+            case 3:
                 cellBox.populateOdd();
                 break;
         }

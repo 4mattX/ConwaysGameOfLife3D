@@ -97,13 +97,7 @@ public class CellBox {
     }
 
     public void render(Graphics g) {
-        renderBackOutline(g);
-//        for (CellCube cube : this.cells) {
-//            if (!cube.isAlive()) {
-//                continue;
-//            }
-//            cube.render(g);
-//        }
+//        renderBackOutline(g);
 
         for (int x = 0; x < amountX; x++) {
             for (int y = 0; y < amountY; y++) {
@@ -115,7 +109,7 @@ public class CellBox {
             }
         }
 
-        renderFrontOutline(g);
+//        renderFrontOutline(g);
     }
 
     public void renderFrontOutline(Graphics g) {
@@ -199,22 +193,18 @@ public class CellBox {
 
     public Color colorAdjust(int x, int y, int z) {
 
-        int center = amountX / 2;
+        double xD = x;
+        double yD = y;
+        double zD = z;
 
-        int distance = (int) (Math.sqrt(Math.pow(center - x, 2) + Math.pow(center - y, 2) + Math.pow(center - z, 2)));
+        double amount = amountX;
 
-        int multiplier = (int) 255 / (distance + 1);
 
-        int redDif = (Math.abs(center - x) + 20);
-        int greenDif = (Math.abs(center - y) + 20) * 2;
-        int blueDif = (Math.abs(center - z) + 20) * 4;
+        double newX = (xD / amount) * 255.0;
+        double newY = (yD / amount) * 255.0;
+        double newZ = (zD / amount) * 255.0;
 
-        int distanceBack = (x + z) / 4;
-
-        Color color = null;
-
-//        color = new Color((distance + 10) * 4 + 20, greenDif + 20, (distance) * 4 + 10);
-        color = new Color(100 + distanceBack, greenDif + distanceBack, blueDif + distanceBack);
+        Color color = new Color((int) newX, (int) newY, (int) newZ);
 
         return color;
     }
@@ -286,25 +276,39 @@ public class CellBox {
         }
     }
 
-    public void createGlider() {
+    public void createGlider(int gliderType) {
         // 4555 Glider
         int x = amountX / 2;
         int y = amountY / 2;
         int z = amountZ / 2;
 
-        int[] glider;
+        int[] glider = new int[27];
 
-        glider = new int[] {1, 1, 0,
-                            1, 1, 0,
-                            0, 0, 0,
+        if (gliderType == 0) {
+            glider = new int[] {1, 1, 0,
+                                1, 1, 0,
+                                0, 0, 0,
 
-                            0, 1, 0,
-                            1, 1, 1,
-                            0, 1, 0,
+                                0, 1, 0,
+                                1, 1, 1,
+                                0, 1, 0,
 
-                            0, 0, 0,
-                            0, 1, 1,
-                            0, 1, 1};
+                                0, 0, 0,
+                                0, 1, 1,
+                                0, 1, 1};
+        } else if (gliderType == 1) {
+            glider = new int[] {0, 0, 0,
+                                1, 0, 1,
+                                0, 0, 0,
+
+                                0, 0, 0,
+                                1, 0, 1,
+                                0, 0, 0,
+
+                                0, 0, 0,
+                                1, 0, 1,
+                                0, 0, 0};
+        }
 
         int cellCounter = 0;
 
