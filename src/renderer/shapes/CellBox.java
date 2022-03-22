@@ -97,7 +97,9 @@ public class CellBox {
     }
 
     public void render(Graphics g) {
-//        renderBackOutline(g);
+        if (Display.toggleOutline) {
+            renderBackOutline(g);
+        }
 
         for (int x = 0; x < amountX; x++) {
             for (int y = 0; y < amountY; y++) {
@@ -109,7 +111,9 @@ public class CellBox {
             }
         }
 
-//        renderFrontOutline(g);
+        if (Display.toggleOutline) {
+            renderFrontOutline(g);
+        }
     }
 
     public void renderFrontOutline(Graphics g) {

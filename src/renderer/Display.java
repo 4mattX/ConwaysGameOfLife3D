@@ -38,10 +38,12 @@ public class Display extends Canvas implements Runnable {
     private static JSlider worldSlider = new JSlider();
     private static JSlider colorSlider = new JSlider();
     private static JSlider leftSlider4 = new JSlider();
+    private static JToggleButton outlineToggleButton = new JToggleButton();
 
     private static boolean open = false;
     private static boolean rOpen = false;
     private static boolean pause = false;
+    public static boolean toggleOutline = true;
     private static int organismID = 0;
 
     public static final int WIDTH = 1000;
@@ -368,7 +370,7 @@ public class Display extends Canvas implements Runnable {
 
         leftPanel.add(ageSlider, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 10, 205, -1));
         leftPanel.add(worldSlider, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 90, 205, -1));
-        leftPanel.add(colorSlider, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 170, 205, -1));
+        leftPanel.add(outlineToggleButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 170, 205, -1));
 
         bornLabel.setText("Born Rules");
         bornLabel.setForeground(Color.BLUE);
@@ -486,21 +488,32 @@ public class Display extends Canvas implements Runnable {
         });
 
         // COLOR SLIDER
-        colorSlider.setMinimum(0);
-        colorSlider.setMaximum(255);
-        colorSlider.setValue(125);
 
-        colorSlider.setPaintTrack(true);
-        colorSlider.setMajorTickSpacing(50);
-        colorSlider.setPaintLabels(true);
-        colorSlider.setBorder(BorderFactory.createTitledBorder("Color Key: " + colorSlider.getValue()));
-
-        colorSlider.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                colorSlider.setBorder(BorderFactory.createTitledBorder("Color Key: " + colorSlider.getValue()));
+        outlineToggleButton.setSelected(true);
+        outlineToggleButton.setText("Toggle Outline");
+        outlineToggleButton.addActionListener(e -> {
+            if (toggleOutline) {
+                toggleOutline = false;
+            } else {
+                toggleOutline = true;
             }
         });
+
+//        colorSlider.setMinimum(0);
+//        colorSlider.setMaximum(255);
+//        colorSlider.setValue(125);
+//
+//        colorSlider.setPaintTrack(true);
+//        colorSlider.setMajorTickSpacing(50);
+//        colorSlider.setPaintLabels(true);
+//        colorSlider.setBorder(BorderFactory.createTitledBorder("Color Key: " + colorSlider.getValue()));
+//
+//        colorSlider.addChangeListener(new ChangeListener() {
+//            @Override
+//            public void stateChanged(ChangeEvent e) {
+//                colorSlider.setBorder(BorderFactory.createTitledBorder("Color Key: " + colorSlider.getValue()));
+//            }
+//        });
     }
 
     // Initializer used to create first instances of cells
