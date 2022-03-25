@@ -32,7 +32,7 @@ public class Display extends Canvas implements Runnable {
     private static JToggleButton[] bornButtons = new JToggleButton[26];
     private static JToggleButton[] surviveButtons = new JToggleButton[26];
 
-    private static List<String> organismNames = Arrays.asList("RandomBlob", "4-4Star", "4-4Dancer", "Pillars");
+    private static List<String> organismNames = Arrays.asList("RandomBlob", "4-4Star", "4-4Dancer", "Pillars", "4-4Worm");
 
     private static JSlider ageSlider = new JSlider();
     private static JSlider worldSlider = new JSlider();
@@ -394,8 +394,8 @@ public class Display extends Canvas implements Runnable {
             leftPanel.add(surviveButtons[i], new org.netbeans.lib.awtextra.AbsoluteConstraints(135, 245 + (i * 13), 24, 12));
         }
 
-        JRadioButton[] jRadioButtons = new JRadioButton[4];
-        JLabel[] organismLabels = new JLabel[4];
+        JRadioButton[] jRadioButtons = new JRadioButton[5];
+        JLabel[] organismLabels = new JLabel[5];
         ButtonGroup buttonGroup = new ButtonGroup();
 
         for (int i = 0; i < jRadioButtons.length; i++) {
@@ -537,6 +537,9 @@ public class Display extends Canvas implements Runnable {
                 break;
             case 3:
                 cellBox.populateOdd();
+                break;
+            case 4:
+                cellBox.createGlider(2);
                 break;
         }
     }

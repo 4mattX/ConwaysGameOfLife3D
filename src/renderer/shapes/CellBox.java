@@ -312,6 +312,18 @@ public class CellBox {
                                 0, 0, 0,
                                 1, 0, 1,
                                 0, 0, 0};
+        } else if (gliderType == 2) {
+            glider = new int[] {1, 1, 0,
+                    1, 1, 0,
+                    0, 0, 0,
+
+                    0, 0, 0,
+                    0, 0, 0,
+                    0, 0, 0,
+
+                    1, 1, 0,
+                    1, 1, 0,
+                    0, 0, 0};
         }
 
         int cellCounter = 0;
