@@ -32,18 +32,20 @@ public class Display extends Canvas implements Runnable {
     private static JToggleButton[] bornButtons = new JToggleButton[26];
     private static JToggleButton[] surviveButtons = new JToggleButton[26];
 
-    private static List<String> organismNames = Arrays.asList("RandomBlob", "4-4Star", "4-4Dancer", "Pillars", "4-4Worm");
+    private static List<String> organismNames = Arrays.asList("RandomBlob", "4-4Star", "4-4Dancer", "Pillars", "4-4Worm", "Single Block", "Big Blob");
 
     private static JSlider ageSlider = new JSlider();
     private static JSlider worldSlider = new JSlider();
     private static JSlider colorSlider = new JSlider();
     private static JSlider leftSlider4 = new JSlider();
     private static JToggleButton outlineToggleButton = new JToggleButton();
+    private static JToggleButton vonToggleButton = new JToggleButton();
 
     private static boolean open = false;
     private static boolean rOpen = false;
     private static boolean pause = false;
     public static boolean toggleOutline = true;
+    public static boolean toggleVon = false;
     private static int organismID = 0;
 
     public static final int WIDTH = 1000;
@@ -367,10 +369,14 @@ public class Display extends Canvas implements Runnable {
 
         createSliderValues();
 
-
         leftPanel.add(ageSlider, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 10, 205, -1));
         leftPanel.add(worldSlider, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 90, 205, -1));
-        leftPanel.add(outlineToggleButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 170, 205, -1));
+
+        // Outline Toggle Button
+        leftPanel.add(outlineToggleButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 160, 205, -1));
+
+        // Von Neuman Life Toggle Button
+        leftPanel.add(vonToggleButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 190, 205, -1));
 
         bornLabel.setText("Born Rules");
         bornLabel.setForeground(Color.BLUE);
@@ -394,8 +400,8 @@ public class Display extends Canvas implements Runnable {
             leftPanel.add(surviveButtons[i], new org.netbeans.lib.awtextra.AbsoluteConstraints(135, 245 + (i * 13), 24, 12));
         }
 
-        JRadioButton[] jRadioButtons = new JRadioButton[5];
-        JLabel[] organismLabels = new JLabel[5];
+        JRadioButton[] jRadioButtons = new JRadioButton[7];
+        JLabel[] organismLabels = new JLabel[7];
         ButtonGroup buttonGroup = new ButtonGroup();
 
         for (int i = 0; i < jRadioButtons.length; i++) {
@@ -487,8 +493,6 @@ public class Display extends Canvas implements Runnable {
             }
         });
 
-        // COLOR SLIDER
-
         outlineToggleButton.setSelected(true);
         outlineToggleButton.setText("Toggle Outline");
         outlineToggleButton.addActionListener(e -> {
@@ -499,21 +503,11 @@ public class Display extends Canvas implements Runnable {
             }
         });
 
-//        colorSlider.setMinimum(0);
-//        colorSlider.setMaximum(255);
-//        colorSlider.setValue(125);
-//
-//        colorSlider.setPaintTrack(true);
-//        colorSlider.setMajorTickSpacing(50);
-//        colorSlider.setPaintLabels(true);
-//        colorSlider.setBorder(BorderFactory.createTitledBorder("Color Key: " + colorSlider.getValue()));
-//
-//        colorSlider.addChangeListener(new ChangeListener() {
-//            @Override
-//            public void stateChanged(ChangeEvent e) {
-//                colorSlider.setBorder(BorderFactory.createTitledBorder("Color Key: " + colorSlider.getValue()));
-//            }
-//        });
+        vonToggleButton.setText("Toggle Von Neumann Life");
+        vonToggleButton.addActionListener(e -> {
+            toggleVon = !toggleVon;
+        });
+
     }
 
     // Initializer used to create first instances of cells
@@ -540,6 +534,12 @@ public class Display extends Canvas implements Runnable {
                 break;
             case 4:
                 cellBox.createGlider(2);
+                break;
+            case 5:
+                cellBox.createGlider(3);
+                break;
+            case 6:
+                cellBox.populateBigBlob();
                 break;
         }
     }

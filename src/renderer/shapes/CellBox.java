@@ -222,21 +222,27 @@ public class CellBox {
                 for (int z = (amountZ / 2) - radius; z < (amountZ / 2) + radius; z++) {
 
                     Random random = new Random();
-
                     if (random.nextBoolean()) {
-//                        if (random.nextBoolean()) {
-
-//                            if (random.nextBoolean()) {
-                                cellsArray[x][y][z].revive();
-//                                cellsArrayCopy[x][y][z].revive();
-//                            }
-
-//                        }
-
+                        cellsArray[x][y][z].revive();
                     }
                 }
             }
         }
+    }
+
+    public void populateBigBlob() {
+
+        for (int x = 0; x < amountX; x++) {
+            for (int y = 0; y < amountY; y++) {
+                for (int z = 0; z < amountZ; z++) {
+                    Random random = new Random();
+                    if (random.nextBoolean()) {
+                        cellsArray[x][y][z].revive();
+                    }
+                }
+            }
+        }
+
     }
 
     public void populateCenter() {
@@ -314,16 +320,28 @@ public class CellBox {
                                 0, 0, 0};
         } else if (gliderType == 2) {
             glider = new int[] {1, 1, 0,
-                    1, 1, 0,
-                    0, 0, 0,
+                                1, 1, 0,
+                                0, 0, 0,
 
-                    0, 0, 0,
-                    0, 0, 0,
-                    0, 0, 0,
+                                0, 0, 0,
+                                0, 0, 0,
+                                0, 0, 0,
 
-                    1, 1, 0,
-                    1, 1, 0,
-                    0, 0, 0};
+                                1, 1, 0,
+                                1, 1, 0,
+                                0, 0, 0};
+        } else if (gliderType == 3) {
+            glider = new int[] {0, 0, 0,
+                                0, 0, 0,
+                                0, 0, 0,
+
+                                0, 0, 0,
+                                0, 1, 0,
+                                0, 0, 0,
+
+                                0, 0, 0,
+                                0, 0, 0,
+                                0, 0, 0};
         }
 
         int cellCounter = 0;
@@ -443,31 +461,53 @@ public class CellBox {
 
                     amountAlive = 0;
 
-                    for (int layer = -1; layer <= 1; layer++) {
+                    // If Von Neumann use separate logic
+                    if (Display.toggleVon) {
 
+                        if (cellsArray[x + 1][y + 0][z].isAlive()) {
+                            amountAlive++;
+                        }
+
+                        if (cellsArray[x][y + 0][z - 1].isAlive()) {
+                            amountAlive++;
+                        }
+
+                        if (cellsArray[x][y + 0][z + 1].isAlive()) {
+                            amountAlive++;
+                        }
+
+                        if (cellsArray[x - 1][y + 0][z].isAlive()) {
+                            amountAlive++;
+                        }
+
+                        if (cellsArray[x][y + 1][z].isAlive()) {
+                            amountAlive++;
+                        }
+
+                        if (cellsArray[x][y - 1][z].isAlive()) {
+                            amountAlive++;
+                        }
+                    }
+
+                    // Logic for Moore Neighbor group
+                    else {
+                        for (int layer = -1; layer <= 1; layer++) {
 
                             if (cellsArray[x + 1][y + layer][z - 1].isAlive()) {
                                 amountAlive++;
                             }
 
-
-
                             if (cellsArray[x + 1][y + layer][z].isAlive()) {
                                 amountAlive++;
                             }
-
-
 
                             if (cellsArray[x + 1][y + layer][z + 1].isAlive()) {
                                 amountAlive++;
                             }
 
-
                             if (cellsArray[x][y + layer][z - 1].isAlive()) {
                                 amountAlive++;
                             }
-
-
 
                             if (cellsArray[x][y + layer][z].isAlive()) {
                                 if (layer != 0) {
@@ -475,28 +515,22 @@ public class CellBox {
                                 }
                             }
 
-
-
                             if (cellsArray[x][y + layer][z + 1].isAlive()) {
                                 amountAlive++;
                             }
-
-
 
                             if (cellsArray[x - 1][y + layer][z - 1].isAlive()) {
                                 amountAlive++;
                             }
 
+                            if (cellsArray[x - 1][y + layer][z].isAlive()) {
+                                amountAlive++;
+                            }
 
-
-                        if (cellsArray[x - 1][y + layer][z].isAlive()) {
-                            amountAlive++;
+                            if (cellsArray[x - 1][y + layer][z + 1].isAlive()) {
+                                amountAlive++;
+                            }
                         }
-
-                        if (cellsArray[x - 1][y + layer][z + 1].isAlive()) {
-                            amountAlive++;
-                        }
-
                     }
 
                     if (cell.isAlive()) {
