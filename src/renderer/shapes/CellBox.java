@@ -544,6 +544,7 @@ public class CellBox {
                         if (!shouldSurvive) {
                             cellCopy.kill();
                         }
+                        cellCopy.age();
                     }
 
                     if (!cell.isAlive()) {

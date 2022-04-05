@@ -10,6 +10,7 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferStrategy;
+import java.awt.image.VolatileImage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -43,7 +44,7 @@ public class Display extends Canvas implements Runnable {
 
     private static boolean open = false;
     private static boolean rOpen = false;
-    private static boolean pause = false;
+    private static boolean pause = true;
     public static boolean toggleOutline = true;
     public static boolean toggleVon = false;
     private static int organismID = 0;
@@ -64,12 +65,22 @@ public class Display extends Canvas implements Runnable {
     private static LightVector lightVector = LightVector.normalize(new LightVector(-1, 1, -1));
 
     private static boolean running = false;
+    public static Display display;
+
+    // Enable Hardware Acceleration
+    static {
+        System.setProperty("sun.java2d.transaccel", "True");
+        System.setProperty("sun.java2d.opengl", "True");
+        System.setProperty("sun.java2d.d3d", "True");
+        System.setProperty("sun.java2d.ddforcevram", "True");
+    }
 
     public Display() {
         this.frame = new JFrame();
 
         Dimension size = new Dimension(WIDTH, HEIGHT);
         this.setPreferredSize(size);
+        display = this;
     }
 
     public synchronized void start() {
@@ -136,13 +147,17 @@ public class Display extends Canvas implements Runnable {
             return;
         }
 
+
         Graphics g = bs.getDrawGraphics();
+
+
         // Draws background of display
         drawBackground(g);
         cellBox.render(g);
 
         g.dispose();
         bs.show();
+        Toolkit.getDefaultToolkit().sync();
     }
 
     private void drawBackground(Graphics g) {
@@ -562,6 +577,7 @@ public class Display extends Canvas implements Runnable {
         display.frame.setLocationRelativeTo(null); // This centers display on user's screen
 
         display.frame.setVisible(true);
+        display.frame.setIgnoreRepaint(true);
         display.start();
     }
 

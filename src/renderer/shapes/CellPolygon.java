@@ -60,9 +60,8 @@ public class CellPolygon {
             poly.addPoint(p.x, p.y);
         }
 
-
-
         g2.setColor(this.lightingColor);
+
         g2.fillPolygon(poly);
 
     }
